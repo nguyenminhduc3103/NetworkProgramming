@@ -1,0 +1,9 @@
+[2025-12-07 21:09:48] Server start on port 8080
+[2025-12-07 21:12:06] [client] received: {"action": "login", "session": "", "data": {"username": "teo", "password": "123"}}
+[2025-12-07 21:12:06] [login] invalid credentials: teo
+[2025-12-07 21:15:25] [client] received: {"action": "register", "session": "", "data": {"username": "teonhe", "password": "123456"}}
+[2025-12-07 21:15:25] [register] created user: teonhe
+[2025-12-07 21:15:31] [client] received: {"action": "register", "session": "", "data": {"username": "teonhe", "password": "123456"}}
+[2025-12-07 21:15:31] [register] username exists: teonhe
+[2025-12-07 21:59:43] [client] received: {"action": "login", "session": "", "data": {"username": "teonhe", "password": "123456"}}
+[2025-12-07 21:59:43] [login] user 1 logged in (teonhe)
