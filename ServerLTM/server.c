@@ -10,65 +10,173 @@
 #include "utils.h"
 #include "db.h"
 #include "auth.h"
+#include "response.h"
 
 #define PORT 8080
 #define BACKLOG 16
 #define BUF_SIZE 8192
 
-/* thread routine */
+// Check role base on project_id
+static int require_role(
+    int client,
+    MYSQL *conn,
+    int user_id,
+    cJSON *data,
+    int required_role,
+    const char *err_perm,
+    const char *err_val
+) {
+    cJSON *pid = cJSON_GetObjectItem(data, "project_id");
+    if (!pid || !cJSON_IsNumber(pid)) {
+        send_json_response(client, err_val, "Missing project_id", NULL);
+        return -1;
+    }
+
+    int role = db_get_user_role(conn, user_id, pid->valueint);
+    if (role < required_role) {
+        send_json_response(client, err_perm, "Permission denied", NULL);
+        return -1;
+    }
+    return pid->valueint;
+}
+
+// Thread routine
 void *client_thread(void *arg) {
     int client = *(int*)arg;
     free(arg);
 
     char buf[BUF_SIZE];
-    int n = read_line_crlf(client, buf, sizeof(buf));
-    if (n <= 0) {
+    if (read_line_crlf(client, buf, sizeof(buf)) <= 0) {
         close(client);
         return NULL;
     }
-
-    write_server_log("[client] received: %s", buf);
 
     cJSON *root = cJSON_Parse(buf);
     if (!root) {
-        send_json_response(client, "131", "Invalid JSON", NULL);
-        write_server_log("[client] invalid JSON");
-        close(client);
-        return NULL;
+        send_json_response(client, S_LOGIN_ERR, "Invalid JSON", NULL);
+        goto cleanup;
     }
 
     cJSON *action = cJSON_GetObjectItem(root, "action");
-    cJSON *data = cJSON_GetObjectItem(root, "data");
+    cJSON *data   = cJSON_GetObjectItem(root, "data");
+
     if (!action || !cJSON_IsString(action) || !data || !cJSON_IsObject(data)) {
-        send_json_response(client, "131", "Missing action or data", NULL);
-        cJSON_Delete(root);
-        close(client);
-        return NULL;
+        send_json_response(client, S_LOGIN_ERR, "Missing action or data", NULL);
+        goto cleanup;
     }
 
     MYSQL *conn = db_connect();
     if (!conn) {
-        send_json_response(client, "501", "Database connection failed", NULL);
-        cJSON_Delete(root);
-        close(client);
-        return NULL;
+        send_json_response(client, S_LOGIN_SRV, "Database error", NULL);
+        goto cleanup;
     }
 
     const char *act = action->valuestring;
-    if (strcmp(act, "register") == 0) {
-        handle_register_request(client, data, conn);
-    } else if (strcmp(act, "login") == 0) {
-        handle_login_request(client, data, conn);
-    } else {
-        send_json_response(client, "141", "Session conflict", NULL);
+    int user_id = -1;
+
+    // Check session for non-auth
+    if (strcmp(act, "login") != 0 && strcmp(act, "register") != 0) {
+        cJSON *session = cJSON_GetObjectItem(root, "session");
+        if (!session || !cJSON_IsString(session)) {
+            send_json_response(client, S_LOGIN_PERM, "Missing session", NULL);
+            goto cleanup_db;
+        }
+
+        user_id = db_check_session(conn, session->valuestring);
+        if (user_id < 0) {
+            send_json_response(client, S_LOGIN_PERM, "Invalid session", NULL);
+            goto cleanup_db;
+        }
     }
 
+    /* ===== Dispatch ===== */
+
+    // Auth
+    if (strcmp(act, "register") == 0) {
+        handle_register_request(client, data, conn);
+    }
+    else if (strcmp(act, "login") == 0) {
+        handle_login_request(client, data, conn);
+    }
+
+    // Project
+    else if (strcmp(act, "list_projects") == 0) {
+        handle_list_projects(client, user_id, conn);
+    }
+    else if (strcmp(act, "search_project") == 0) {
+        handle_search_project(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "create_project") == 0) {
+        handle_create_project(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "add_member") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_PM, ERR_ADD_MEMBER_PERM, ERR_ADD_MEMBER_VAL) < 0)
+            goto cleanup_db;
+
+        handle_add_member(client, data, user_id, conn);
+    }
+
+    // Task
+    else if (strcmp(act, "list_tasks") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_MEMBER, ERR_LIST_TASK_SERVER, ERR_PROJECT_VALIDATE) < 0)
+            goto cleanup_db;
+
+        handle_list_tasks(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "create_task") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_PM, ERR_CREATE_TASK_PERM, ERR_CREATE_TASK_VAL) < 0)
+            goto cleanup_db;
+
+        handle_create_task(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "assign_task") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_PM, ERR_ASSIGN_TASK_PERM, ERR_ASSIGN_TASK_VAL) < 0)
+            goto cleanup_db;
+
+        handle_assign_task(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "update_task") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_PM, ERR_UPDATE_TASK_PERM, ERR_UPDATE_TASK_VAL) < 0)
+            goto cleanup_db;
+
+        handle_update_task(client, data, user_id, conn);
+    }
+    else if (strcmp(act, "comment_task") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_MEMBER, ERR_COMMENT_TASK_PERM, ERR_PROJECT_VALIDATE) < 0)
+            goto cleanup_db;
+
+        handle_comment_task(client, data, user_id, conn);
+    }
+
+    // Member
+    else if (strcmp(act, "update_member") == 0) {
+        if (require_role(client, conn, user_id, data,
+            ROLE_PM, ERR_MEMBER_PERMISSION, ERR_MEMBER_VALIDATE) < 0)
+            goto cleanup_db;
+
+        handle_update_member(client, data, user_id, conn);
+    }
+
+    // Unknown
+    else {
+        send_json_response(client, S_LOGIN_ERR, "Unknown action", NULL);
+    }
+
+cleanup_db:
     db_close(conn);
+cleanup:
     cJSON_Delete(root);
     close(client);
     return NULL;
 }
 
+// Main
 int main() {
     if (db_init_library() != 0) {
         fprintf(stderr, "mysql_library_init failed\n");
@@ -77,6 +185,7 @@ int main() {
 
     int sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) { perror("socket"); return 1; }
+
     int opt = 1;
     setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
 
@@ -85,19 +194,30 @@ int main() {
     addr.sin_port = htons(PORT);
     addr.sin_addr.s_addr = INADDR_ANY;
 
-    if (bind(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) { perror("bind"); return 1; }
-    if (listen(sock, BACKLOG) < 0) { perror("listen"); return 1; }
+    if (bind(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+        perror("bind");
+        return 1;
+    }
+    if (listen(sock, BACKLOG) < 0) {
+        perror("listen");
+        return 1;
+    }
 
     write_server_log("Server start on port %d", PORT);
     printf("Server start on port %d\n", PORT);
+
     srand((unsigned)time(NULL) ^ (unsigned)getpid());
 
     while (1) {
         struct sockaddr_in cli;
         socklen_t clilen = sizeof(cli);
+
         int *client = malloc(sizeof(int));
         *client = accept(sock, (struct sockaddr*)&cli, &clilen);
-        if (*client < 0) { free(client); continue; }
+        if (*client < 0) {
+            free(client);
+            continue;
+        }
 
         pthread_t tid;
         if (pthread_create(&tid, NULL, client_thread, client) != 0) {

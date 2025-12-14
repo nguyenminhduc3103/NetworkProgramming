@@ -1,23 +1,11 @@
 #include "auth.h"
 #include "utils.h"
 #include "db.h"
+#include "response.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-
-/* Status codes (strings) */
-#define S_LOGIN_OK    "101"
-#define S_LOGIN_ERR   "131"
-#define S_LOGIN_PERM  "141"
-#define S_LOGIN_NF    "151"
-#define S_LOGIN_CFL   "161"
-#define S_LOGIN_SRV   "501"
-
-#define S_REG_OK      "102"
-#define S_REG_ERR     "132"
-#define S_REG_CFL     "162"
-#define S_REG_SRV     "502"
 
 /* generate 32-char hex token */
 static void gen_token(char *buf, size_t n) {
