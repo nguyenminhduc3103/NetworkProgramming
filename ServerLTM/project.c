@@ -225,88 +225,125 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
 /* ===== ADD MEMBER ===== */
 void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
-        send_json_response(client, ERR_MEMBER_VALIDATE,"Invalid session/token",NULL);
+        send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid session/token", NULL);
         return;
     }
 
-    cJSON *pid = cJSON_GetObjectItem(data,"project_id");
-    cJSON *uname = cJSON_GetObjectItem(data,"username");
-    cJSON *role = cJSON_GetObjectItem(data,"role");
+    cJSON *pid   = cJSON_GetObjectItem(data, "project_id");
+    cJSON *uname = cJSON_GetObjectItem(data, "username");
+    cJSON *role  = cJSON_GetObjectItem(data, "role");
 
-    if(!pid || !cJSON_IsNumber(pid) || !uname || !cJSON_IsString(uname) || !role || !cJSON_IsString(role)){
-        send_json_response(client, ERR_ADD_MEMBER_VAL,"Missing required fields",NULL);
+    if (!pid || !cJSON_IsNumber(pid) ||
+        !uname || !cJSON_IsString(uname) ||
+        !role || !cJSON_IsString(role)) {
+        send_json_response(client, ERR_ADD_MEMBER_VAL, "Missing required fields", NULL);
         return;
     }
 
-    // check user exists
+    int project_id = pid->valueint;
+
+    /* ===== MAP ROLE STRING -> INT ===== */
+    int role_val;
+    if (strcmp(role->valuestring, "PM") == 0) {
+        role_val = ROLE_PM;
+    } else if (strcmp(role->valuestring, "MEMBER") == 0) {
+        role_val = ROLE_MEMBER;
+    } else {
+        send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid role", NULL);
+        return;
+    }
+
+    /* ===== CHECK PM PERMISSION ===== */
+    int my_role = db_get_user_role(conn, user_id, project_id);
+    if (my_role != ROLE_PM) {
+        send_json_response(client, ERR_MEMBER_PERMISSION, "Permission denied", NULL);
+        return;
+    }
+
+    /* ===== FIND USER_ID BY USERNAME ===== */
     MYSQL_STMT *chk = mysql_stmt_init(conn);
-    const char *sql_chk="SELECT user_id FROM users WHERE username=?";
+    const char *sql_chk = "SELECT user_id FROM users WHERE username=?";
     MYSQL_BIND bind_chk[1];
     int new_user_id;
-    memset(bind_chk,0,sizeof(bind_chk));
-    bind_chk[0].buffer_type = MYSQL_TYPE_STRING;
-    bind_chk[0].buffer = uname->valuestring;
+
+    memset(bind_chk, 0, sizeof(bind_chk));
+    bind_chk[0].buffer_type   = MYSQL_TYPE_STRING;
+    bind_chk[0].buffer        = uname->valuestring;
     bind_chk[0].buffer_length = strlen(uname->valuestring);
-    mysql_stmt_bind_param(chk,bind_chk);
-    if(mysql_stmt_prepare(chk,sql_chk,strlen(sql_chk))!=0 || mysql_stmt_execute(chk)!=0){
-        if(chk) mysql_stmt_close(chk);
-        send_json_response(client, ERR_ADD_MEMBER_SERVER,"Server error",NULL);
-        return;
-    }
+
+    mysql_stmt_prepare(chk, sql_chk, strlen(sql_chk));
+    mysql_stmt_bind_param(chk, bind_chk);
+    mysql_stmt_execute(chk);
+
     MYSQL_BIND res[1];
-    memset(res,0,sizeof(res));
-    res[0].buffer_type = MYSQL_TYPE_LONG; res[0].buffer = &new_user_id;
-    mysql_stmt_bind_result(chk,res);
+    memset(res, 0, sizeof(res));
+    res[0].buffer_type = MYSQL_TYPE_LONG;
+    res[0].buffer      = &new_user_id;
+
+    mysql_stmt_bind_result(chk, res);
     mysql_stmt_store_result(chk);
-    if(mysql_stmt_num_rows(chk)==0){
+
+    if (mysql_stmt_num_rows(chk) == 0) {
         mysql_stmt_close(chk);
-        send_json_response(client, ERR_USER_NOT_FOUND,"User not found",NULL);
+        send_json_response(client, ERR_USER_NOT_FOUND, "User not found", NULL);
         return;
     }
+
     mysql_stmt_fetch(chk);
     mysql_stmt_close(chk);
 
-    // check conflict
+    /* ===== CHECK MEMBER CONFLICT ===== */
     MYSQL_STMT *conf = mysql_stmt_init(conn);
-    const char *sql_conf="SELECT * FROM project_members WHERE project_id=? AND user_id=?";
+    const char *sql_conf =
+        "SELECT 1 FROM project_members WHERE project_id=? AND user_id=?";
     MYSQL_BIND bind_conf[2];
-    memset(bind_conf,0,sizeof(bind_conf));
-    bind_conf[0].buffer_type = MYSQL_TYPE_LONG; bind_conf[0].buffer = &pid->valueint;
-    bind_conf[1].buffer_type = MYSQL_TYPE_LONG; bind_conf[1].buffer = &new_user_id;
-    mysql_stmt_bind_param(conf,bind_conf);
-    if(mysql_stmt_prepare(conf,sql_conf,strlen(sql_conf))!=0 || mysql_stmt_execute(conf)!=0){
-        if(conf) mysql_stmt_close(conf);
-        send_json_response(client, ERR_ADD_MEMBER_SERVER,"Server error",NULL);
-        return;
-    }
+
+    memset(bind_conf, 0, sizeof(bind_conf));
+    bind_conf[0].buffer_type = MYSQL_TYPE_LONG;
+    bind_conf[0].buffer      = &project_id;
+    bind_conf[1].buffer_type = MYSQL_TYPE_LONG;
+    bind_conf[1].buffer      = &new_user_id;
+
+    mysql_stmt_prepare(conf, sql_conf, strlen(sql_conf));
+    mysql_stmt_bind_param(conf, bind_conf);
+    mysql_stmt_execute(conf);
     mysql_stmt_store_result(conf);
-    if(mysql_stmt_num_rows(conf)>0){
+
+    if (mysql_stmt_num_rows(conf) > 0) {
         mysql_stmt_close(conf);
-        send_json_response(client, ERR_ADD_MEMBER_CONFLICT,"User already member",NULL);
+        send_json_response(client, ERR_ADD_MEMBER_CONFLICT,
+                           "User already member", NULL);
         return;
     }
     mysql_stmt_close(conf);
 
-    // insert member
+    /* ===== INSERT MEMBER ===== */
     MYSQL_STMT *ins = mysql_stmt_init(conn);
-    const char *sql_ins="INSERT INTO project_members(project_id,user_id,role) VALUES(?,?,?)";
-    if(!ins || mysql_stmt_prepare(ins,sql_ins,strlen(sql_ins))!=0){
-        if(ins) mysql_stmt_close(ins);
-        send_json_response(client, ERR_ADD_MEMBER_SERVER,"Server error",NULL);
-        return;
-    }
+    const char *sql_ins =
+        "INSERT INTO project_members (project_id, user_id, role) VALUES (?,?,?)";
     MYSQL_BIND bind_ins[3];
-    memset(bind_ins,0,sizeof(bind_ins));
-    bind_ins[0].buffer_type = MYSQL_TYPE_LONG; bind_ins[0].buffer = &pid->valueint;
-    bind_ins[1].buffer_type = MYSQL_TYPE_LONG; bind_ins[1].buffer = &new_user_id;
-    bind_ins[2].buffer_type = MYSQL_TYPE_STRING; bind_ins[2].buffer = role->valuestring; bind_ins[2].buffer_length=strlen(role->valuestring);
-    mysql_stmt_bind_param(ins,bind_ins);
-    if(mysql_stmt_execute(ins)!=0){
+
+    memset(bind_ins, 0, sizeof(bind_ins));
+    bind_ins[0].buffer_type = MYSQL_TYPE_LONG;
+    bind_ins[0].buffer      = &project_id;
+    bind_ins[1].buffer_type = MYSQL_TYPE_LONG;
+    bind_ins[1].buffer      = &new_user_id;
+    bind_ins[2].buffer_type = MYSQL_TYPE_LONG;
+    bind_ins[2].buffer      = &role_val;
+
+    mysql_stmt_prepare(ins, sql_ins, strlen(sql_ins));
+    mysql_stmt_bind_param(ins, bind_ins);
+
+    if (mysql_stmt_execute(ins) != 0) {
+        send_json_response(client, ERR_ADD_MEMBER_SERVER,
+                           mysql_error(conn), NULL);
         mysql_stmt_close(ins);
-        send_json_response(client, ERR_ADD_MEMBER_SERVER,"Server error",NULL);
         return;
     }
     mysql_stmt_close(ins);
 
-    send_json_response(client, RES_ADD_MEMBER_OK,"Member added successfully",NULL);
+    send_json_response(client, RES_ADD_MEMBER_OK,
+                       "Member added successfully", NULL);
 }
+
+

@@ -4,10 +4,9 @@
 //Authentication Responses
 // Login
 #define S_LOGIN_OK      "101"
+#define S_LOGIN_NF      "121"
 #define S_LOGIN_ERR     "131"
 #define S_LOGIN_PERM    "141"
-#define S_LOGIN_NF      "151"
-#define S_LOGIN_CFL     "161"
 #define S_LOGIN_SRV     "501"
 
 // Register

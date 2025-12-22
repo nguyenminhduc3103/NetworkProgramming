@@ -120,11 +120,20 @@ void *client_thread(void *arg) {
             handle_add_member(client, data, user_id, conn);
         }
         else if (strcmp(act, "list_tasks") == 0) {
-            if (require_role(client, conn, user_id, data, ROLE_MEMBER,
-                ERR_LIST_TASK_SERVER, ERR_PROJECT_VALIDATE) < 0) {
+            cJSON *pid = cJSON_GetObjectItem(data, "project_id");
+            if (!pid || !cJSON_IsNumber(pid)) {
+                send_json_response(client, ERR_PROJECT_VALIDATE, "Missing project_id", NULL);
                 cJSON_Delete(root);
                 continue;
             }
+
+            int role = db_get_user_role(conn, user_id, pid->valueint);
+            if (role == ROLE_NONE) {
+                send_json_response(client, ERR_SEARCH_PERMISSION, "Permission denied", NULL);
+                cJSON_Delete(root);
+                continue;
+            }
+
             handle_list_tasks(client, data, user_id, conn);
         }
         else if (strcmp(act, "create_task") == 0) {
@@ -136,27 +145,12 @@ void *client_thread(void *arg) {
             handle_create_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "assign_task") == 0) {
-            if (require_role(client, conn, user_id, data, ROLE_PM,
-                ERR_ASSIGN_TASK_PERM, ERR_ASSIGN_TASK_VAL) < 0) {
-                cJSON_Delete(root);
-                continue;
-            }
             handle_assign_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "update_task") == 0) {
-            if (require_role(client, conn, user_id, data, ROLE_PM,
-                ERR_UPDATE_TASK_PERM, ERR_UPDATE_TASK_VAL) < 0) {
-                cJSON_Delete(root);
-                continue;
-            }
             handle_update_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "comment_task") == 0) {
-            if (require_role(client, conn, user_id, data, ROLE_MEMBER,
-                ERR_COMMENT_TASK_PERM, ERR_PROJECT_VALIDATE) < 0) {
-                cJSON_Delete(root);
-                continue;
-            }
             handle_comment_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "update_member") == 0) {

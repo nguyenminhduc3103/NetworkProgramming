@@ -43,8 +43,8 @@ def create_project(session, name, desc):
     req = {"action": "create_project", "session": session, "data": {"project_name": name, "description": desc}}
     return send_request(req)
 
-def add_member(session, project_id, user_id, role):
-    req = {"action": "add_member", "session": session, "data": {"project_id": project_id, "user_id": user_id, "role": role}}
+def add_member(session, project_id, username, role):
+    req = {"action": "add_member", "session": session, "data": {"project_id": project_id, "username": username, "role": role}}
     return send_request(req)
 
 def list_tasks(session, project_id):
@@ -55,8 +55,8 @@ def create_task(session, project_id, task_name, desc):
     req = {"action": "create_task", "session": session, "data": {"project_id": project_id, "task_name": task_name, "description": desc}}
     return send_request(req)
 
-def assign_task(session, task_id, username):
-    req = {"action": "assign_task", "session": session, "data": {"task_id": task_id, "username": username}}
+def assign_task(session, task_id, user_id):
+    req = {"action": "assign_task", "session": session, "data": {"task_id": task_id, "assigned_to": user_id}}
     return send_request(req)
 
 def update_task(session, task_id, status):
@@ -74,10 +74,10 @@ def update_member(session, project_id, user_id, role):
 
 if __name__ == "__main__":
     print("=== REGISTER ===")
-    print(register("teonhe", "123456"))
+    print(register("teonhe2", "123456"))
 
     print("=== LOGIN ===")
-    resp = login("teonhe", "123456")
+    resp = login("teonhe2", "123456")
     print(resp)
     session = resp.get("data", {}).get("session", "")
 
@@ -89,16 +89,16 @@ if __name__ == "__main__":
     print(list_projects(session))
 
     print("=== CREATE PROJECT ===")
-    create_resp = create_project(session, "TestProject", "Project description")
+    create_resp = create_project(session, "TestProject2", "Project description")
     print(create_resp)
 
-    project_id = 1
+    project_id = 3
     if create_resp.get("status") == "105":
         project_id = create_resp.get("data", {}).get("project_id")
 
     if project_id:
         print("=== ADD MEMBER ===")
-        print(add_member(session, project_id, 1, "Member"))
+        print(add_member(session, project_id, "teonhe1", "MEMBER"))
 
         print("=== LIST TASKS ===")
         print(list_tasks(session, project_id))
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
         if task_id:
             print("=== ASSIGN TASK ===")
-            print(assign_task(session, task_id, "teonhe"))
+            print(assign_task(session, task_id, 2))
 
             print("=== UPDATE TASK ===")
             print(update_task(session, task_id, "in_progress"))
