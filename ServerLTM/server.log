@@ -7,3 +7,85 @@
 [2025-12-07 21:15:31] [register] username exists: teonhe
 [2025-12-07 21:59:43] [client] received: {"action": "login", "session": "", "data": {"username": "teonhe", "password": "123456"}}
 [2025-12-07 21:59:43] [login] user 1 logged in (teonhe)
+[2025-12-14 20:30:49] Server start on port 8080
+[2025-12-14 20:34:51] Server start on port 8080
+[2025-12-14 20:35:10] [client] received: {"action": "login", "session": "", "data": {"username": "teonhe", "password": "123456"}}
+[2025-12-14 20:35:20] [login] user 1 logged in (teonhe)
+[2025-12-14 23:18:18] Server start on port 8080
+[2025-12-14 23:18:22] [register] username exists: teonhe
+[2025-12-14 23:18:22] [login] user 1 logged in (teonhe)
+[2025-12-14 23:19:13] [register] username exists: teonhe
+[2025-12-14 23:19:13] [login] user 1 logged in (teonhe)
+[2025-12-14 23:19:45] [register] username exists: teonhe
+[2025-12-14 23:19:45] [login] user 1 logged in (teonhe)
+[2025-12-15 00:37:52] Server start on port 8080
+[2025-12-21 23:58:21] Server start on port 8080
+[2025-12-21 23:58:52] [register] username exists: teonhe
+[2025-12-21 23:58:52] [login] user 1 logged in (teonhe)
+[2025-12-22 00:01:36] [register] created user: teonhe1
+[2025-12-22 00:01:36] [login] user 2 logged in (teonhe1)
+[2025-12-22 00:01:46] [register] username exists: teonhe1
+[2025-12-22 00:01:46] [login] user 2 logged in (teonhe1)
+[2025-12-22 00:13:23] [register] username exists: teonhe1
+[2025-12-22 00:13:23] [login] user 2 logged in (teonhe1)
+[2025-12-22 00:14:27] [register] username exists: teonhe
+[2025-12-22 00:14:27] [login] user 1 logged in (teonhe)
+[2025-12-22 00:16:02] [register] username exists: teonhe
+[2025-12-22 00:16:02] [login] user 1 logged in (teonhe)
+[2025-12-22 00:16:52] [register] username exists: teonhe1
+[2025-12-22 00:16:52] [login] user 2 logged in (teonhe1)
+[2025-12-22 00:17:26] [register] created user: teonhe2
+[2025-12-22 00:17:26] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:17:38] [register] username exists: teonhe2
+[2025-12-22 00:17:38] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:17:44] [register] username exists: teonhe2
+[2025-12-22 00:17:44] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:19:19] [register] username exists: teonhe2
+[2025-12-22 00:19:19] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:20:00] [register] username exists: teonhe2
+[2025-12-22 00:20:00] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:21:05] [register] username exists: teonhe2
+[2025-12-22 00:21:05] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:23:28] [register] username exists: teonhe2
+[2025-12-22 00:23:28] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:25:55] [register] username exists: teonhe2
+[2025-12-22 00:25:55] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:32:48] [register] username exists: teonhe2
+[2025-12-22 00:32:48] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:33:23] [register] username exists: teonhe2
+[2025-12-22 00:33:23] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:39:18] [register] username exists: teonhe2
+[2025-12-22 00:39:18] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:42:40] [register] username exists: teonhe2
+[2025-12-22 00:42:40] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:43:47] Server start on port 8080
+[2025-12-22 00:43:51] [register] username exists: teonhe2
+[2025-12-22 00:43:51] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:50:22] Server start on port 8080
+[2025-12-22 00:50:27] [register] username exists: teonhe2
+[2025-12-22 00:50:27] [login] user 3 logged in (teonhe2)
+[2025-12-22 00:50:50] [register] username exists: teonhe2
+[2025-12-22 00:50:50] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:03:21] Server start on port 8080
+[2025-12-22 01:03:25] [register] username exists: teonhe2
+[2025-12-22 01:03:25] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:07:25] Server start on port 8080
+[2025-12-22 01:07:31] [register] username exists: teonhe2
+[2025-12-22 01:07:31] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:09:34] [register] username exists: teonhe2
+[2025-12-22 01:09:34] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:11:34] Server start on port 8080
+[2025-12-22 01:11:37] [register] username exists: teonhe2
+[2025-12-22 01:11:37] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:15:03] [register] username exists: teonhe2
+[2025-12-22 01:15:03] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:15:56] Server start on port 8080
+[2025-12-22 01:16:00] [register] username exists: teonhe2
+[2025-12-22 01:16:00] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:16:14] [register] username exists: teonhe2
+[2025-12-22 01:16:14] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:17:13] [register] username exists: teonhe2
+[2025-12-22 01:17:13] [login] user 3 logged in (teonhe2)
+[2025-12-22 01:18:58] Server start on port 8080
+[2025-12-22 01:19:01] [register] username exists: teonhe2
+[2025-12-22 01:19:01] [login] user 3 logged in (teonhe2)

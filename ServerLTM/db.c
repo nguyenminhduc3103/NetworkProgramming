@@ -30,7 +30,7 @@ void db_close(MYSQL *conn) {
     if (conn) mysql_close(conn);
 }
 
-/* Insert a log row into logs table. user_id may be -1 to insert NULL */
+// Insert a log row into logs table. user_id may be -1 to insert NULL
 void db_log(MYSQL *conn, int user_id, const char *action, const char *request, const char *response_json) {
     if (!conn) return;
     MYSQL_STMT *stmt = mysql_stmt_init(conn);
@@ -64,4 +64,79 @@ void db_log(MYSQL *conn, int user_id, const char *action, const char *request, c
     mysql_stmt_bind_param(stmt, bind);
     mysql_stmt_execute(stmt);
     mysql_stmt_close(stmt);
+}
+
+// Check session token, return user_id or -1 if invalid
+int db_check_session(MYSQL *conn, const char *token) {
+    MYSQL_STMT *stmt = mysql_stmt_init(conn);
+    const char *sql =
+        "SELECT user_id FROM sessions WHERE token = ?";
+
+    if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0)
+        return -1;
+
+    MYSQL_BIND b[1];
+    memset(b, 0, sizeof(b));
+    b[0].buffer_type = MYSQL_TYPE_STRING;
+    b[0].buffer = (char*)token;
+    b[0].buffer_length = strlen(token);
+    mysql_stmt_bind_param(stmt, b);
+
+    if (mysql_stmt_execute(stmt) != 0)
+        return -1;
+
+    mysql_stmt_store_result(stmt);
+    if (mysql_stmt_num_rows(stmt) == 0) {
+        mysql_stmt_close(stmt);
+        return -1;
+    }
+
+    int uid;
+    MYSQL_BIND r[1];
+    memset(r, 0, sizeof(r));
+    r[0].buffer_type = MYSQL_TYPE_LONG;
+    r[0].buffer = &uid;
+    mysql_stmt_bind_result(stmt, r);
+    mysql_stmt_fetch(stmt);
+    mysql_stmt_close(stmt);
+
+    return uid;
+}
+
+// Get user role in project
+int db_get_user_role(MYSQL *conn, int user_id, int project_id) {
+    MYSQL_STMT *stmt = mysql_stmt_init(conn);
+    const char *sql =
+        "SELECT role FROM project_members WHERE user_id=? AND project_id=?";
+
+    if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0)
+        return ROLE_NONE;
+
+    MYSQL_BIND b[2];
+    memset(b, 0, sizeof(b));
+    b[0].buffer_type = MYSQL_TYPE_LONG;
+    b[0].buffer = &user_id;
+    b[1].buffer_type = MYSQL_TYPE_LONG;
+    b[1].buffer = &project_id;
+    mysql_stmt_bind_param(stmt, b);
+
+    mysql_stmt_execute(stmt);
+    mysql_stmt_store_result(stmt);
+    if (mysql_stmt_num_rows(stmt) == 0) {
+        mysql_stmt_close(stmt);
+        return ROLE_NONE;
+    }
+
+    char role[16];
+    MYSQL_BIND r[1];
+    memset(r, 0, sizeof(r));
+    r[0].buffer_type = MYSQL_TYPE_STRING;
+    r[0].buffer = role;
+    r[0].buffer_length = sizeof(role);
+    mysql_stmt_bind_result(stmt, r);
+    mysql_stmt_fetch(stmt);
+    mysql_stmt_close(stmt);
+
+    if (strcmp(role, "PM") == 0) return ROLE_PM;
+    return ROLE_MEMBER;
 }
