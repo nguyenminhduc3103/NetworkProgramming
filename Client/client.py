@@ -5,18 +5,33 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-
 SERVER_HOST = "127.0.0.1"
 SERVER_PORT = 5000
 
 # ============================
-# HELPER FUNCTION
+# STATUS CODE MAPPING
 # ============================
+STATUS_MAP = {
+    # Auth
+    "131": "Lỗi dữ liệu đăng nhập", "141": "Không có quyền truy cập", "151": "Không tìm thấy người dùng", "161": "Tài khoản bị khóa",
+    "132": "Dữ liệu đăng ký không hợp lệ", "162": "Username đã tồn tại",
+    # Project
+    "133": "Session không hợp lệ", "143": "Không có quyền xem dự án", "153": "Không tìm thấy dự án",
+    "135": "Thiếu thông tin tạo dự án", "165": "Tên dự án đã tồn tại",
+    "136": "Thiếu thông tin thành viên", "146": "Chỉ Admin/PM mới có quyền thêm thành viên", "156": "User không tồn tại", "166": "User đã là thành viên",
+    # Task
+    "138": "Thiếu thông tin task", "148": "Chỉ PM mới được tạo task", "168": "Tên task bị trùng",
+    "139": "Dữ liệu gán task lỗi", "149": "Chỉ PM mới được gán task", "159": "User không thuộc dự án này",
+    "140": "Dữ liệu cập nhật lỗi", "150": "Chỉ thành viên dự án mới được cập nhật",
+    "151_msg": "Chỉ PM hoặc người thực hiện mới được bình luận", # Trùng mã 151 của auth nên đặt tên khác
+    # Server
+    "501": "Server Auth lỗi", "503": "Server Project lỗi", "507": "Server Task lỗi"
+}
 
+# ============================
+# HELPER FUNCTIONS
+# ============================
 def send_request(action, session="", data={}):
-    """
-    send request to server and receive response with CRLF delimiter
-    """
     request = json.dumps({
         "action": action,
         "session": session,
@@ -25,323 +40,191 @@ def send_request(action, session="", data={}):
     
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(5)
             s.connect((SERVER_HOST, SERVER_PORT))
             s.sendall(request.encode())
             
             buffer = ""
             while True:
                 chunk = s.recv(4096).decode()
-                if not chunk:
-                    break
+                if not chunk: break
                 buffer += chunk
                 if "\r\n" in buffer:
                     resp_str, _ = buffer.split("\r\n", 1)
                     return json.loads(resp_str)
     except Exception as e:
         return {"status": "error", "message": str(e)}
-    
     return {"status": "error", "message": "No response from server"}
+
+def show_message(res, success_code, success_msg):
+    """Hàm hiển thị thông báo dựa trên status code"""
+    status = str(res.get("status"))
+    if status == success_code:
+        st.success(success_msg)
+        return True
+    else:
+        err_msg = STATUS_MAP.get(status, res.get("message", "Lỗi không xác định"))
+        st.error(f"❌ Lỗi ({status}): {err_msg}")
+        return False
 
 # ============================
 # SESSION STATE
 # ============================
-
-if "session" not in st.session_state:
-    st.session_state.session = ""
-if "username" not in st.session_state:
-    st.session_state.username = ""
-if "selected_project" not in st.session_state:
-    st.session_state.selected_project = None
-if "user_role" not in st.session_state:
-    st.session_state.user_role = {}
+if "session" not in st.session_state: st.session_state.session = ""
+if "username" not in st.session_state: st.session_state.username = ""
+if "selected_project" not in st.session_state: st.session_state.selected_project = None
 
 # ============================
 # STREAMLIT UI
 # ============================
-
-st.title("🟦 Client Project Manager")
+st.title("🟦 Project Manager Professional")
 
 # ----------------------------
-# LOGIN FORM
+# LOGIN / REGISTER
 # ----------------------------
 if st.session_state.session == "":
-    st.subheader("🔐 Đăng nhập / Đăng ký")
-    
+    st.subheader("🔐 Xác thực hệ thống")
     col1, col2 = st.columns(2)
-    with col1:
-        username = st.text_input("Username")
-    with col2:
-        password = st.text_input("Password", type="password")
+    with col1: username = st.text_input("Username")
+    with col2: password = st.text_input("Password", type="password")
     
-    col3, col4 = st.columns(2)
-    with col3:
-        if st.button("Login"):
-            res = send_request("login", session="", data={"username": username, "password": password})
-            if res.get("status") == "101":  # S_LOGIN_OK
+    btn_col1, btn_col2 = st.columns(2)
+    with btn_col1:
+        if st.button("Đăng nhập", use_container_width=True):
+            res = send_request("login", data={"username": username, "password": password})
+            if res.get("status") == "101":
                 st.session_state.session = res["data"]["session"]
                 st.session_state.username = username
-                st.success("✅ Đăng nhập thành công!")
+                st.success("✅ Chào mừng quay trở lại!")
                 st.rerun()
             else:
-                st.error(f"❌ {res.get('message', 'Đăng nhập thất bại')}")
-    with col4:
-        if st.button("Register"):
-            res = send_request("register", session="", data={"username": username, "password": password})
-            if res.get("status") == "102":  # S_REG_OK
-                st.success("✅ Đăng ký thành công! Hãy đăng nhập")
-            else:
-                st.error(f"❌ {res.get('message', 'Đăng ký thất bại')}")
-    
+                show_message(res, "101", "")
+                
+    with btn_col2:
+        if st.button("Đăng ký tài khoản", use_container_width=True):
+            res = send_request("register", data={"username": username, "password": password})
+            show_message(res, "102", "✅ Đăng ký thành công! Mời bạn đăng nhập.")
     st.stop()
 
 # ----------------------------
-# HEADER & LOGOUT
+# LOGOUT & HEADER
 # ----------------------------
-col1, col2 = st.columns([3, 1])
-with col1:
-    st.write(f"👤 **User:** {st.session_state.username}")
-with col2:
-    if st.button("🚪 Logout"):
-        st.session_state.session = ""
-        st.session_state.username = ""
-        st.session_state.selected_project = None
-        st.session_state.user_role = {}
-        st.rerun()
+col_user, col_logout = st.columns([3, 1])
+col_user.write(f"👤 **User:** {st.session_state.username}")
+if col_logout.button("🚪 Đăng xuất"):
+    st.session_state.session = ""
+    st.rerun()
 
 st.divider()
-
-# ----------------------------
-# TABS
-# ----------------------------
 tab1, tab2, tab3, tab4 = st.tabs(["📋 Dự án", "✅ Công việc", "👥 Thành viên", "💬 Nhận xét"])
 
 # ============================
-# TAB 1: PROJECT MANAGEMENT
+# TAB 1: DỰ ÁN (103, 104, 105)
 # ============================
 with tab1:
     st.header("📋 Quản lý dự án")
     
-    # 1. PROJECT LIST
-    st.subheader("Danh sách dự án của bạn")
-    
-    if st.button("🔄 Làm mới danh sách", key="refresh_projects"):
+    if st.button("🔄 Làm mới danh sách"):
         res = send_request("list_projects", st.session_state.session)
-        if res.get("status") == "code(ok)":
+        if res.get("status") == "103":
             projects = res["data"]["projects"]
-            if projects:
-                for p in projects:
-                    with st.container():
-                        col_a, col_b, col_c = st.columns([2,2,1])
-                        with col_a: st.write(f"**{p['name']}**")
-                        with col_b: st.write(f"ID: {p['id']}")
-                        with col_c:
-                            if st.button("Chọn", key=f"select_{p['id']}"):
-                                st.session_state.selected_project = p
-                                st.rerun()
-            else:
-                st.info("Bạn chưa tham gia dự án nào")
+            if not projects: st.info("Bạn chưa tham gia dự án nào")
+            for p in projects:
+                with st.container(border=True):
+                    c1, c2, c3 = st.columns([3,2,1])
+                    c1.write(f"**{p['name']}**")
+                    c2.write(f"ID: `{p['id']}`")
+                    if c3.button("Chọn", key=f"sel_{p['id']}"):
+                        st.session_state.selected_project = p
+                        st.rerun()
         else:
-            st.error(res.get("message"))
-    
-    st.divider()
-    
-    # 2. PROJECT SEARCH
-    st.subheader("🔍 Tìm kiếm dự án")
-    col1, col2 = st.columns([3,1])
-    with col1:
-        search_kw = st.text_input("Nhập từ khóa", key="search_input")
-    with col2:
-        st.write("")
-        st.write("")
-        search_btn = st.button("Tìm kiếm", type="primary")
-    if search_btn and search_kw:
-        res = send_request("search_project", st.session_state.session, {"keyword": search_kw})
-        if res.get("status") == "code(ok)":
-            projects = res["data"]["projects"]
-            if projects:
-                st.success(f"Tìm thấy {len(projects)} dự án")
-                for p in projects:
-                    st.write(f"• **{p['name']}** (ID: {p['id']})")
-            else:
-                st.warning("Không tìm thấy dự án nào")
-        else:
-            st.error(res.get("message"))
-    
-    st.divider()
-    
-    # 3. CREATE PROJECT
-    st.subheader("➕ Tạo dự án mới")
-    with st.form("create_project_form"):
-        new_project_name = st.text_input("Tên dự án")
-        new_project_desc = st.text_area("Mô tả dự án")
-        submit_project = st.form_submit_button("Tạo dự án", type="primary")
-        if submit_project:
-            if new_project_name:
-                res = send_request("create_project", st.session_state.session, 
-                                   {"name": new_project_name, "description": new_project_desc})
-                if res.get("status") == "code(ok)":
-                    st.success(f"✅ Tạo dự án '{new_project_name}' thành công!")
-                else:
-                    st.error(res.get("message", "Tạo dự án thất bại"))
-            else:
-                st.warning("Vui lòng nhập tên dự án")
+            show_message(res, "103", "")
+
+    st.subheader("🔍 Tìm kiếm")
+    skw = st.text_input("Nhập tên dự án...")
+    if st.button("Tìm"):
+        res = send_request("search_project", st.session_state.session, {"keyword": skw})
+        if res.get("status") == "104":
+            st.write(res["data"]["projects"])
+        else: show_message(res, "104", "")
+
+    st.subheader("➕ Tạo dự án")
+    with st.form("create_prj"):
+        pname = st.text_input("Tên dự án")
+        pdesc = st.text_area("Mô tả")
+        if st.form_submit_button("Xác nhận tạo"):
+            res = send_request("create_project", st.session_state.session, {"name": pname, "description": pdesc})
+            show_message(res, "105", "✅ Đã tạo dự án mới!")
 
 # ============================
-# TAB 2: TASKS MANAGEMENT
+# TAB 2: CÔNG VIỆC (107, 108, 109, 110)
 # ============================
 with tab2:
-    st.header("✅ Quản lý công việc")
-    
-    if st.session_state.selected_project:
-        project = st.session_state.selected_project
-        st.info(f"📂 Dự án: **{project['name']}** (ID: {project['id']})")
-        
-        # 4. LIST TASKS
-        st.subheader("Danh sách công việc")
-        if st.button("🔄 Tải công việc", key="load_tasks"):
-            res = send_request("list_tasks", st.session_state.session, {"project_id": project['id']})
-            if res.get("status") == "code(ok)":
-                tasks = res["data"]["tasks"]
-                if tasks:
-                    for task in tasks:
-                        with st.expander(f"📌 {task.get('name', 'Unnamed')} - {task.get('status', 'N/A')}"):
-                            st.write(f"**ID:** {task['id']}")
-                            st.write(f"**Trạng thái:** {task.get('status','N/A')}")
-                            st.write(f"**Người thực hiện:** {task.get('assignee','Chưa gán')}")
-                            st.write(f"**Mô tả:** {task.get('description','Không có')}")
-                            col1, col2 = st.columns(2)
-                            with col1:
-                                new_status = st.selectbox(
-                                    "Thay đổi trạng thái",
-                                    ["todo","in_progress","done","blocked"],
-                                    key=f"status_{task['id']}"
-                                )
-                            with col2:
-                                st.write("")
-                                if st.button("Cập nhật", key=f"update_{task['id']}"):
-                                    res2 = send_request("update_task_status", st.session_state.session,
-                                                        {"task_id": task['id'], "status": new_status})
-                                    if res2.get("status") == "code(ok)":
-                                        st.success("✅ Cập nhật thành công!")
-                                        st.rerun()
-                                    else:
-                                        st.error(res2.get("message"))
-                else:
-                    st.info("Dự án chưa có công việc nào")
-            else:
-                st.error(res.get("message"))
-        
-        st.divider()
-        
-        # 5. CREATE TASK
-        st.subheader("➕ Tạo công việc mới")
-        with st.form("create_task_form"):
-            task_name = st.text_input("Tên công việc")
-            task_desc = st.text_area("Mô tả công việc")
-            submit_task = st.form_submit_button("Tạo công việc", type="primary")
-            if submit_task:
-                if task_name:
-                    res2 = send_request("create_task", st.session_state.session,
-                                        {"project_id": project['id'], "name": task_name, "description": task_desc})
-                    if res2.get("status") == "code(ok)":
-                        st.success(f"✅ Tạo công việc '{task_name}' thành công!")
-                    else:
-                        st.error(res2.get("message", "Tạo công việc thất bại"))
-                else:
-                    st.warning("Vui lòng nhập tên công việc")
-        
-        st.divider()
-        
-        # 6. ASSIGN TASK
-        st.subheader("👤 Gán công việc")
-        with st.form("assign_task_form"):
-            col1, col2 = st.columns(2)
-            with col1:
-                assign_task_id = st.text_input("ID công việc")
-            with col2:
-                assign_username = st.text_input("Username người nhận")
-            submit_assign = st.form_submit_button("Gán công việc", type="primary")
-            if submit_assign:
-                if assign_task_id and assign_username:
-                    res3 = send_request("assign_task", st.session_state.session,
-                                        {"task_id": assign_task_id, "username": assign_username})
-                    if res3.get("status") == "code(ok)":
-                        st.success(f"✅ Đã gán công việc cho {assign_username}")
-                    else:
-                        st.error(res3.get("message", "Gán công việc thất bại"))
-                else:
-                    st.warning("Vui lòng nhập đầy đủ thông tin")
+    if not st.session_state.selected_project:
+        st.warning("Vui lòng chọn dự án ở tab 'Dự án'")
     else:
-        st.warning("⚠️ Vui lòng chọn dự án từ tab 'Dự án'")
+        prj = st.session_state.selected_project
+        st.info(f"📂 Đang xem: **{prj['name']}**")
+
+        if st.button("🔄 Tải danh sách công việc"):
+            res = send_request("list_tasks", st.session_state.session, {"project_id": prj['id']})
+            if res.get("status") == "107":
+                for t in res["data"]["tasks"]:
+                    with st.expander(f"📌 {t['name']} ({t['status']})"):
+                        st.write(f"ID: `{t['id']}` | Gán cho: {t.get('assignee','--')}")
+                        new_s = st.selectbox("Cập nhật trạng thái", ["todo", "in_progress", "done", "blocked"], key=f"s_{t['id']}")
+                        if st.button("Lưu trạng thái", key=f"btn_{t['id']}"):
+                            res2 = send_request("update_task_status", st.session_state.session, {"task_id": t['id'], "status": new_s})
+                            if show_message(res2, "110", "✅ Đã cập nhật!"): st.rerun()
+            else: show_message(res, "107", "")
+
+        st.subheader("➕ Tạo Task mới")
+        with st.form("new_task"):
+            tname = st.text_input("Tên công việc")
+            tdesc = st.text_area("Mô tả")
+            if st.form_submit_button("Thêm Task"):
+                res = send_request("create_task", st.session_state.session, {"project_id": prj['id'], "name": tname, "description": tdesc})
+                show_message(res, "108", "✅ Thêm công việc thành công!")
+
+        st.subheader("👤 Gán nhân sự")
+        with st.form("assign_task"):
+            tid = st.text_input("ID công việc")
+            tuser = st.text_input("Username người nhận")
+            if st.form_submit_button("Gán việc"):
+                res = send_request("assign_task", st.session_state.session, {"task_id": tid, "username": tuser})
+                show_message(res, "109", f"✅ Đã gán task cho {tuser}")
 
 # ============================
-# TAB 3: MEMBER MANAGEMENT
+# TAB 3: THÀNH VIÊN (106)
 # ============================
 with tab3:
-    st.header("👥 Quản lý thành viên")
     if st.session_state.selected_project:
-        project = st.session_state.selected_project
-        st.info(f"📂 Dự án: **{project['name']}** (ID: {project['id']})")
-        
-        # ADD MEMBER
-        st.subheader("➕ Thêm thành viên mới")
-        with st.form("add_member_form"):
-            member_username = st.text_input("Username thành viên")
-            member_role = st.selectbox("Vai trò", ["member", "admin", "viewer"])
-            submit_member = st.form_submit_button("Thêm thành viên", type="primary")
-            if submit_member:
-                if member_username:
-                    res4 = send_request("add_member", st.session_state.session,
-                                        {"project_id": project['id'], "username": member_username, "role": member_role})
-                    if res4.get("status") == "code(ok)":
-                        st.success(f"✅ Đã thêm {member_username} vào dự án")
-                    else:
-                        st.error(res4.get("message", "Thêm thành viên thất bại"))
-                else:
-                    st.warning("Vui lòng nhập username")
-        
-        st.divider()
-        st.subheader("📋 Danh sách thành viên hiện tại")
-        st.info("Chức năng xem danh sách thành viên cần API 'list_members'")
+        prj = st.session_state.selected_project
+        st.subheader("➕ Thêm thành viên vào nhóm")
+        with st.form("add_mem"):
+            mname = st.text_input("Username")
+            mrole = st.selectbox("Vai trò", ["member", "admin", "viewer"])
+            if st.form_submit_button("Mời vào dự án"):
+                res = send_request("add_member", st.session_state.session, 
+                                   {"project_id": prj['id'], "username": mname, "role": mrole})
+                show_message(res, "106", f"✅ Đã thêm {mname} làm {mrole}")
     else:
-        st.warning("⚠️ Vui lòng chọn dự án từ tab 'Dự án'")
+        st.warning("Vui lòng chọn dự án")
 
 # ============================
-# TAB 4: COMMENTS MANAGEMENT
+# TAB 4: NHẬN XÉT (111)
 # ============================
 with tab4:
-    st.header("💬 Nhận xét công việc")
     if st.session_state.selected_project:
-        project = st.session_state.selected_project
-        st.info(f"📂 Dự án: **{project['name']}** (ID: {project['id']})")
-        
-        # ADD COMMENT
-        st.subheader("✍️ Thêm nhận xét")
-        with st.form("comment_task_form"):
-            comment_task_id = st.text_input("ID công việc")
-            comment_content = st.text_area("Nội dung nhận xét")
-            submit_comment = st.form_submit_button("Gửi nhận xét", type="primary")
-            if submit_comment:
-                if comment_task_id and comment_content:
-                    res5 = send_request("comment_task", st.session_state.session,
-                                        {"task_id": comment_task_id, "comment": comment_content})
-                    if res5.get("status") == "code(ok)":
-                        st.success("✅ Đã gửi nhận xét thành công!")
-                    else:
-                        st.error(res5.get("message", "Gửi nhận xét thất bại"))
-                else:
-                    st.warning("Vui lòng nhập đầy đủ thông tin")
-        
-        st.divider()
-        st.subheader("📜 Xem nhận xét")
-        view_comment_task_id = st.text_input("Nhập ID công việc để xem nhận xét", key="view_comments")
-        if st.button("Xem nhận xét"):
-            if view_comment_task_id:
-                st.info("Chức năng xem nhận xét cần API 'get_comments'")
-            else:
-                st.warning("Vui lòng nhập ID công việc")
+        st.subheader("✍️ Gửi nhận xét")
+        with st.form("comment_frm"):
+            ctid = st.text_input("ID công việc")
+            cmsg = st.text_area("Nội dung")
+            if st.form_submit_button("Gửi"):
+                res = send_request("comment_task", st.session_state.session, {"task_id": ctid, "comment": cmsg})
+                show_message(res, "111", "✅ Đã gửi nhận xét!")
     else:
-        st.warning("⚠️ Vui lòng chọn dự án từ tab 'Dự án'")
+        st.warning("Vui lòng chọn dự án")
 
 st.divider()
-st.caption("🟦 Client Project Manager | Session: " + st.session_state.session[:20] + "...")
+st.caption(f"Session: {st.session_state.session[:15]}... | UI v2.0")
