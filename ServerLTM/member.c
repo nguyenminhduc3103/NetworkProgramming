@@ -22,10 +22,54 @@ void handle_update_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     int target_user = target_uid->valueint;
     char *role = role_obj->valuestring;
 
+    if (strcmp(role, "PM") != 0 && strcmp(role, "MEMBER") != 0) {
+        send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid role", NULL);
+        return;
+    }
+
     // Check PM role for current user
     int my_role = db_get_user_role(conn, user_id, project_id);
     if (my_role != ROLE_PM) {
         send_json_response(client, ERR_MEMBER_PERMISSION, "Permission denied", NULL);
+        return;
+    }
+
+    // Check existing member and current role to avoid treating no-change as server error
+    MYSQL_STMT *chk = mysql_stmt_init(conn);
+    const char *sql_chk = "SELECT role FROM project_members WHERE project_id=? AND user_id=?";
+    MYSQL_BIND bind_chk[2];
+    memset(bind_chk, 0, sizeof(bind_chk));
+    bind_chk[0].buffer_type = MYSQL_TYPE_LONG; bind_chk[0].buffer = &project_id;
+    bind_chk[1].buffer_type = MYSQL_TYPE_LONG; bind_chk[1].buffer = &target_user;
+
+    if (!chk || mysql_stmt_prepare(chk, sql_chk, strlen(sql_chk)) != 0) {
+        send_json_response(client, ERR_MEMBER_SERVER, "Server error", NULL);
+        if (chk) mysql_stmt_close(chk);
+        return;
+    }
+    mysql_stmt_bind_param(chk, bind_chk);
+    if (mysql_stmt_execute(chk) != 0) {
+        send_json_response(client, ERR_MEMBER_SERVER, "Server error", NULL);
+        mysql_stmt_close(chk);
+        return;
+    }
+    mysql_stmt_store_result(chk);
+    if (mysql_stmt_num_rows(chk) == 0) {
+        mysql_stmt_close(chk);
+        send_json_response(client, ERR_USER_NOT_FOUND, "Member not in project", NULL);
+        return;
+    }
+
+    char current_role[16];
+    MYSQL_BIND res_chk[1];
+    memset(res_chk, 0, sizeof(res_chk));
+    res_chk[0].buffer_type = MYSQL_TYPE_STRING; res_chk[0].buffer = current_role; res_chk[0].buffer_length = sizeof(current_role);
+    mysql_stmt_bind_result(chk, res_chk);
+    mysql_stmt_fetch(chk);
+    mysql_stmt_close(chk);
+
+    if (strcmp(current_role, role) == 0) {
+        send_json_response(client, RES_UPDATE_MEMBER_OK, "Role unchanged", NULL);
         return;
     }
 
@@ -44,7 +88,7 @@ void handle_update_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     bind[2].buffer_type = MYSQL_TYPE_LONG; bind[2].buffer = &target_user;
     mysql_stmt_bind_param(stmt, bind);
 
-    if (mysql_stmt_execute(stmt) != 0 || mysql_stmt_affected_rows(stmt) == 0) {
+    if (mysql_stmt_execute(stmt) != 0) {
         send_json_response(client, ERR_MEMBER_SERVER, "Server error", NULL);
         mysql_stmt_close(stmt);
         return;

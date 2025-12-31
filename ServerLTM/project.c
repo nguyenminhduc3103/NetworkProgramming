@@ -346,4 +346,78 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
                        "Member added successfully", NULL);
 }
 
+/* ===== LIST MEMBERS ===== */
+void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
+    if (user_id <= 0) {
+        send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid session/token", NULL);
+        return;
+    }
+
+    cJSON *pid_json = cJSON_GetObjectItem(data, "project_id");
+    if (!pid_json || !cJSON_IsNumber(pid_json)) {
+        send_json_response(client, ERR_MEMBER_VALIDATE, "Missing project_id", NULL);
+        return;
+    }
+
+    int project_id = pid_json->valueint;
+
+    // Kiểm tra quyền của user: chỉ PM hoặc MEMBER mới được xem
+    int my_role = db_get_user_role(conn, user_id, project_id);
+    if (my_role != ROLE_PM && my_role != ROLE_MEMBER) {
+        send_json_response(client, ERR_MEMBER_PERMISSION, "Permission denied", NULL);
+        return;
+    }
+
+    MYSQL_STMT *stmt = mysql_stmt_init(conn);
+    const char *sql = "SELECT u.user_id, u.username, pm.role "
+                      "FROM project_members pm "
+                      "JOIN users u ON pm.user_id = u.user_id "
+                      "WHERE pm.project_id=?";
+    if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {
+        if (stmt) mysql_stmt_close(stmt);
+        send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
+        return;
+    }
+
+    MYSQL_BIND bind[1];
+    memset(bind, 0, sizeof(bind));
+    bind[0].buffer_type = MYSQL_TYPE_LONG;
+    bind[0].buffer = &project_id;
+    mysql_stmt_bind_param(stmt, bind);
+
+    if (mysql_stmt_execute(stmt) != 0) {
+        mysql_stmt_close(stmt);
+        send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
+        return;
+    }
+
+    mysql_stmt_store_result(stmt);
+    if (mysql_stmt_num_rows(stmt) == 0) {
+        mysql_stmt_close(stmt);
+        send_json_response(client, ERR_MEMBER_NOT_FOUND, "No members found", NULL);
+        return;
+    }
+
+    MYSQL_BIND res[3];
+    int uid, role_val;
+    char username[256];
+    memset(res, 0, sizeof(res));
+    res[0].buffer_type = MYSQL_TYPE_LONG; res[0].buffer = &uid;
+    res[1].buffer_type = MYSQL_TYPE_STRING; res[1].buffer = username; res[1].buffer_length = sizeof(username);
+    res[2].buffer_type = MYSQL_TYPE_LONG; res[2].buffer = &role_val;
+    mysql_stmt_bind_result(stmt, res);
+
+    cJSON *arr = cJSON_CreateArray();
+    while (mysql_stmt_fetch(stmt) == 0) {
+        cJSON *m = cJSON_CreateObject();
+        cJSON_AddNumberToObject(m, "user_id", uid);
+        cJSON_AddStringToObject(m, "username", username);
+        const char *role_str = (role_val == ROLE_PM) ? "PM" : "MEMBER";
+        cJSON_AddStringToObject(m, "role", role_str);
+        cJSON_AddItemToArray(arr, m);
+    }
+
+    mysql_stmt_close(stmt);
+    send_json_response(client, RES_LIST_MEMBER_OK, "Members retrieved", arr);
+}
 

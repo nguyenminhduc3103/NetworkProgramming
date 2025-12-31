@@ -5,8 +5,8 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-SERVER_HOST = "127.0.0.1"
-SERVER_PORT = 5000
+SERVER_HOST = "172.31.245.233"
+SERVER_PORT = 8080
 
 # ============================
 # STATUS CODE MAPPING

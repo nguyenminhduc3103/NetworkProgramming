@@ -21,6 +21,9 @@
 #define RES_CREATE_PROJECT_OK    "105"
 #define RES_ADD_MEMBER_OK        "106"
 
+#define ERR_MEMBER_NOT_FOUND    "169"
+#define RES_LIST_MEMBER_OK      "269"
+
 #define ERR_PROJECT_VALIDATE     "133"
 #define ERR_CREATE_PROJECT_VAL   "135"
 #define ERR_ADD_MEMBER_VAL       "136"

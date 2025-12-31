@@ -89,3 +89,17 @@
 [2025-12-22 01:18:58] Server start on port 8080
 [2025-12-22 01:19:01] [register] username exists: teonhe2
 [2025-12-22 01:19:01] [login] user 3 logged in (teonhe2)
+[2025-12-29 00:39:32] Server start on port 8080
+[2025-12-29 00:40:13] [register] username exists: teonhe2
+[2025-12-29 00:40:13] [login] user 3 logged in (teonhe2)
+[2025-12-29 00:48:01] Server start on port 8080
+[2025-12-29 00:48:12] [register] username exists: teonhe2
+[2025-12-29 00:48:12] [login] user 3 logged in (teonhe2)
+[2025-12-29 00:50:25] Server start on port 8080
+[2025-12-29 00:50:30] [register] username exists: teonhe2
+[2025-12-29 00:50:30] [login] user 3 logged in (teonhe2)
+[2025-12-29 00:55:21] [login] invalid credentials: 1
+[2025-12-29 00:56:07] [login] user 3 logged in (teonhe2)
+[2025-12-31 03:56:13] Server start on port 8080
+[2025-12-31 03:56:24] [register] username exists: teonhe2
+[2025-12-31 03:56:24] [login] user 3 logged in (teonhe2)

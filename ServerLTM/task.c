@@ -221,10 +221,11 @@ void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     int task_id = tid->valueint;
     char *stat = status->valuestring;
     int project_id = -1;
+    int assigned_to = -1;
 
-    /* ===== 1. Get project_id from task ===== */
+    /* ===== 1. Get project_id and assignee from task ===== */
     MYSQL_STMT *q = mysql_stmt_init(conn);
-    const char *sql_q = "SELECT project_id FROM tasks WHERE task_id=?";
+    const char *sql_q = "SELECT project_id, assigned_to FROM tasks WHERE task_id=?";
     MYSQL_BIND qb[1] = {0};
 
     qb[0].buffer_type = MYSQL_TYPE_LONG;
@@ -234,9 +235,11 @@ void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(q, qb);
     mysql_stmt_execute(q);
 
-    MYSQL_BIND qr[1] = {0};
+    MYSQL_BIND qr[2] = {0};
     qr[0].buffer_type = MYSQL_TYPE_LONG;
     qr[0].buffer = &project_id;
+    qr[1].buffer_type = MYSQL_TYPE_LONG;
+    qr[1].buffer = &assigned_to;
 
     mysql_stmt_bind_result(q, qr);
     mysql_stmt_store_result(q);
@@ -250,9 +253,14 @@ void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_fetch(q);
     mysql_stmt_close(q);
 
-    /* ===== 2. Check PM permission ===== */
+    /* ===== 2. Permission: PM or assigned user inside project ===== */
     int role = db_get_user_role(conn, user_id, project_id);
-    if (role != ROLE_PM) {
+    if (role == ROLE_NONE) {
+        send_json_response(client, ERR_UPDATE_TASK_PERM, "Permission denied", NULL);
+        return;
+    }
+
+    if (role != ROLE_PM && assigned_to != user_id) {
         send_json_response(client, ERR_UPDATE_TASK_PERM, "Permission denied", NULL);
         return;
     }
