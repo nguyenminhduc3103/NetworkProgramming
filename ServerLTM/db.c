@@ -4,11 +4,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define DB_HOST "172.31.245.233"
+
+#define DB_HOST "maglev.proxy.rlwy.net"
 #define DB_USER "root"
-#define DB_PASS "31032004"
+#define DB_PASS "sOhTMiQJUJfdyaeSXzzmsTSpPxlmGkOD"
 #define DB_NAME "project_management"
-#define DB_PORT 3306
+#define DB_PORT 34331
 
 int db_init_library(void) {
     return mysql_library_init(0, NULL, NULL);
