@@ -1,7 +1,7 @@
 import socket
 import json
 
-HOST = "172.31.245.233"
+HOST = "172.18.215.152"
 PORT = 8080
 
 def send_request(req):
@@ -74,7 +74,7 @@ def update_member(session, project_id, user_id, role):
 
 if __name__ == "__main__":
     print("=== REGISTER ===")
-    print(register("teonhe2", "123456"))
+    #sprint(register("teonhe2", "123456"))
 
     print("=== LOGIN ===")
     resp = login("teonhe2", "123456")
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     create_resp = create_project(session, "TestProject2", "Project description")
     print(create_resp)
 
-    project_id = 3
+    project_id = 1
     if create_resp.get("status") == "105":
         project_id = create_resp.get("data", {}).get("project_id")
 
