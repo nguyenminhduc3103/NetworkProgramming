@@ -10,7 +10,19 @@ def send_request(req):
     s.connect((HOST, PORT))
     msg = json.dumps(req) + "\r\n"
     s.sendall(msg.encode())
-    resp = s.recv(8192).decode()
+    
+    # Nhận toàn bộ response (có thể > 8KB)
+    chunks = []
+    while True:
+        chunk = s.recv(8192)
+        if not chunk:
+            break
+        chunks.append(chunk)
+        # Nếu chunk < 8192, có thể đã hết data
+        if len(chunk) < 8192:
+            break
+    
+    resp = b''.join(chunks).decode()
     s.close()
     try:
         return json.loads(resp)
@@ -89,7 +101,29 @@ if __name__ == "__main__":
         exit(1)
 
     print("=== LIST PROJECTS ===")
-    print(list_projects(session))
+    projects_resp = list_projects(session)
+    
+    # Kiểm tra số lượng projects
+    if projects_resp.get("status") == "103":
+        projects = projects_resp.get("data", [])
+        print(f"Tổng số projects: {len(projects)}")
+        
+        # Đếm Thread_Project
+        thread_projects = [p for p in projects if "Thread_Project_" in p.get("project_name", "")]
+        print(f"Số Thread_Project_: {len(thread_projects)}")
+        
+        # In 5 projects đầu và 5 cuối
+        print("\n5 projects đầu tiên:")
+        for p in projects[:5]:
+            print(f"  [{p['project_id']}] {p['project_name']}")
+        
+        if len(projects) > 10:
+            print(f"\n... ({len(projects) - 10} projects ở giữa) ...\n")
+            print("5 projects cuối cùng:")
+            for p in projects[-5:]:
+                print(f"  [{p['project_id']}] {p['project_name']}")
+    else:
+        print(projects_resp)
 
     print("=== CREATE PROJECT ===")
     create_resp = create_project(session, "TestProject2", "Project description")
