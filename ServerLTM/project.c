@@ -218,6 +218,8 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
         return;
     }
     mysql_stmt_close(pm);
+    
+    write_server_log("[create_project] user_id=%d project_id=%d project_name=%s", user_id, proj_id, name->valuestring);
 
     send_json_response(client, RES_CREATE_PROJECT_OK,"Project created successfully",NULL);
 }
@@ -341,6 +343,8 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
         return;
     }
     mysql_stmt_close(ins);
+    
+    write_server_log("[add_member] user_id=%d project_id=%d new_member=%s role=%s", user_id, project_id, uname->valuestring, role->valuestring);
 
     send_json_response(client, RES_ADD_MEMBER_OK,
                        "Member added successfully", NULL);

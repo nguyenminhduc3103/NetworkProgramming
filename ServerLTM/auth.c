@@ -107,7 +107,7 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
     if (!username || !password) {
         send_json_response(client, S_LOGIN_ERR, "Missing input", NULL);
         db_log(conn, -1, "login", "{\"error\":\"missing_input\"}", "{\"status\":\"131\"}");
-        write_server_log("[login] missing input");
+        write_server_log("[login] FAILED - missing_input username=%s", username ? username : "null");
         return;
     }
 
@@ -142,7 +142,7 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
         send_json_response(client, S_LOGIN_NF, "Invalid login", NULL);
         db_log(conn, -1, "login", username, "{\"status\":\"151\"}");
         mysql_stmt_close(stmt);
-        write_server_log("[login] invalid credentials: %s", username);
+        write_server_log("[login] FAILED - invalid_credentials username=%s reason=user_not_found_or_wrong_password", username);
         return;
     }
 
@@ -203,5 +203,5 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
     cJSON_AddStringToObject(d, "session", token);
     send_json_response(client, S_LOGIN_OK, "Login successful", d);
     db_log(conn, user_id, "login", username, "{\"status\":\"101\"}");
-    write_server_log("[login] user %d logged in (%s)", user_id, username);
+    write_server_log("[login] SUCCESS user_id=%d username=%s session_created=true", user_id, username);
 }

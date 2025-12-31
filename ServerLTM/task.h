@@ -9,5 +9,6 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn);
 void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn);
 void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn);
 void handle_comment_task(int client, cJSON *data, int user_id, MYSQL *conn);
+void handle_get_task_detail(int client, cJSON *data, int user_id, MYSQL *conn);
 
 #endif

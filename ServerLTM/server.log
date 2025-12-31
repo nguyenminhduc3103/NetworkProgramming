@@ -18,3 +18,94 @@
 [2025-12-31 12:09:26] Server start on port 8080
 [2025-12-31 12:09:35] [login] user 3 logged in (teonhe2)
 [2025-12-31 12:11:26] [login] user 3 logged in (teonhe2)
+[2025-12-31 12:29:45] Server start on port 8080
+[2025-12-31 12:30:35] Server start on port 8080
+[2025-12-31 12:30:50] [DISPATCH] action=login
+[2025-12-31 12:30:52] [login] user 1 logged in (teonhe2)
+[2025-12-31 12:30:57] [DISPATCH] action=list_projects user_id=1
+[2025-12-31 12:31:18] [DISPATCH] action=list_tasks user_id=1
+[2025-12-31 12:31:31] [DISPATCH] action=assign_task user_id=1
+[2025-12-31 12:34:48] [DISPATCH] action=update_task user_id=1
+[2025-12-31 12:38:55] Server start on port 8080
+[2025-12-31 12:39:15] [DISPATCH] action=login
+[2025-12-31 12:39:15] [login] user 3 logged in (teonhe2)
+[2025-12-31 12:39:42] [DISPATCH] action=list_projects user_id=3
+[2025-12-31 12:40:02] [DISPATCH] action=list_tasks user_id=3
+[2025-12-31 12:40:20] [DISPATCH] action=update_task user_id=3
+[2025-12-31 12:41:04] [DISPATCH] action=list_tasks user_id=3
+[2025-12-31 12:41:57] [DISPATCH] action=comment_task user_id=3
+[2025-12-31 12:42:03] [DISPATCH] action=comment_task user_id=3
+[2025-12-31 12:42:20] [DISPATCH] action=assign_task user_id=3
+[2025-12-31 12:43:11] [DISPATCH] action=list_members user_id=3
+[2025-12-31 12:52:41] Server start on port 8080
+[2025-12-31 12:53:22] Client connected: ip=172.31.240.1:57398
+[2025-12-31 12:53:32] [DISPATCH] action=login ip=:57398 username=teonhe2
+[2025-12-31 12:53:32] [login] user 3 logged in (teonhe2)
+[2025-12-31 12:53:37] Client connected: ip=172.31.240.1:57174
+[2025-12-31 12:53:45] [DISPATCH] action=list_projects ip=:57174 user_id=3 username=teonhe2
+[2025-12-31 12:57:22] Server start on port 8080
+[2025-12-31 12:58:55] Client connected
+[2025-12-31 12:59:04] [DISPATCH] action=login username=admin
+[2025-12-31 12:59:04] [login] FAILED - invalid_credentials username=admin reason=user_not_found_or_wrong_password
+[2025-12-31 13:00:09] Client connected
+[2025-12-31 13:00:19] [DISPATCH] action=login username=teonhe2
+[2025-12-31 13:00:19] Client connected
+[2025-12-31 13:00:19] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
+[2025-12-31 13:00:26] [DISPATCH] action=get_task_detail user_id=3 task_id=8
+[2025-12-31 13:01:51] Server start on port 8080
+[2025-12-31 13:01:55] Client connected
+[2025-12-31 13:02:05] [DISPATCH] action=login username=teonhe2
+[2025-12-31 13:02:05] Client connected
+[2025-12-31 13:02:05] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
+[2025-12-31 13:02:10] [DISPATCH] action=get_task_detail user_id=3 task_id=8
+[2025-12-31 13:03:24] Server start on port 8080
+[2025-12-31 13:03:27] Client connected
+[2025-12-31 13:03:37] [DISPATCH] action=login username=teonhe2
+[2025-12-31 13:03:37] Client connected
+[2025-12-31 13:03:37] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
+[2025-12-31 13:03:42] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2025-12-31 13:03:42] Client connected
+[2025-12-31 13:03:49] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 13:03:49] Client connected
+[2025-12-31 13:03:59] [DISPATCH] action=add_member user_id=3 new_member=teonhe1 role=MEMBER
+[2025-12-31 13:03:59] Client connected
+[2025-12-31 13:04:06] [DISPATCH] action=list_members user_id=3 project_id=3
+[2025-12-31 13:04:06] Client connected
+[2025-12-31 13:04:13] [DISPATCH] action=list_tasks user_id=3 project_id=3
+[2025-12-31 13:04:13] Client connected
+[2025-12-31 13:04:21] [DISPATCH] action=create_task user_id=3 project_id=3 task_name=TestTask
+[2025-12-31 13:04:21] [create_task] user_id=3 project_id=3 task_id=42 task_name=TestTask
+[2025-12-31 13:04:21] Client connected
+[2025-12-31 13:04:28] [DISPATCH] action=assign_task user_id=3 task_id=42 assigned_to_user=2
+[2025-12-31 13:04:28] Client connected
+[2025-12-31 13:04:34] [DISPATCH] action=update_task user_id=3 task_id=42 new_status=in_progress
+[2025-12-31 13:04:34] Client connected
+[2025-12-31 13:04:44] [DISPATCH] action=comment_task user_id=3 task_id=42
+[2025-12-31 13:04:44] Client connected
+[2025-12-31 13:04:49] [DISPATCH] action=update_task user_id=3 task_id=42 new_status=done
+[2025-12-31 13:06:52] Client connected
+[2025-12-31 13:07:01] [DISPATCH] action=login username=teonhe2
+[2025-12-31 13:07:01] Client connected
+[2025-12-31 13:07:01] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
+[2025-12-31 13:07:07] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2025-12-31 13:07:07] Client connected
+[2025-12-31 13:07:14] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 13:07:14] Client connected
+[2025-12-31 13:07:22] [DISPATCH] action=add_member user_id=3 new_member=teonhe1 role=MEMBER
+[2025-12-31 13:07:22] Client connected
+[2025-12-31 13:07:29] [DISPATCH] action=list_members user_id=3 project_id=3
+[2025-12-31 13:07:29] Client connected
+[2025-12-31 13:07:36] [DISPATCH] action=list_tasks user_id=3 project_id=3
+[2025-12-31 13:07:36] Client connected
+[2025-12-31 13:07:46] [DISPATCH] action=create_task user_id=3 project_id=3 task_name=TestTask
+[2025-12-31 13:07:46] [create_task] user_id=3 project_id=3 task_id=43 task_name=TestTask
+[2025-12-31 13:07:46] Client connected
+[2025-12-31 13:07:52] [DISPATCH] action=assign_task user_id=3 task_id=43 assigned_to_user=2
+[2025-12-31 13:07:52] Client connected
+[2025-12-31 13:07:57] [DISPATCH] action=update_task user_id=3 task_id=43 new_status=in_progress
+[2025-12-31 13:07:57] Client connected
+[2025-12-31 13:08:07] [DISPATCH] action=comment_task user_id=3 task_id=43
+[2025-12-31 13:08:07] Client connected
+[2025-12-31 13:08:14] [DISPATCH] action=update_task user_id=3 task_id=43 new_status=done
+[2025-12-31 13:08:14] Client connected
+[2025-12-31 13:08:21] [DISPATCH] action=get_task_detail user_id=3 task_id=43

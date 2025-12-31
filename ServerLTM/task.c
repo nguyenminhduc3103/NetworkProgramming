@@ -123,6 +123,8 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *res = cJSON_CreateObject();
     cJSON_AddNumberToObject(res, "project_id", project_id);
     cJSON_AddNumberToObject(res, "task_id", task_id);
+    
+    write_server_log("[create_task] user_id=%d project_id=%d task_id=%d task_name=%s", user_id, project_id, task_id, tname->valuestring);
 
     send_json_response(client, RES_CREATE_TASK_OK, "Task created", res);
 }
@@ -406,3 +408,129 @@ void handle_comment_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     send_json_response(client, RES_COMMENT_TASK_OK, "Comment added", res);
 }
 
+/* ===== GET TASK DETAIL (with comments) ===== */
+void handle_get_task_detail(int client, cJSON *data, int user_id, MYSQL *conn) {
+    cJSON *task_id_obj = cJSON_GetObjectItem(data, "task_id");
+    if (!task_id_obj || !cJSON_IsNumber(task_id_obj)) {
+        send_json_response(client, ERR_CREATE_TASK_VAL, "Missing task_id", NULL);
+        return;
+    }
+
+    int task_id = task_id_obj->valueint;
+
+    // 1. Get task info
+    MYSQL_STMT *stmt = mysql_stmt_init(conn);
+    const char *sql_task = "SELECT t.task_id, t.project_id, t.task_name, t.description, "
+                           "t.status, t.assigned_to, u.username "
+                           "FROM tasks t "
+                           "LEFT JOIN users u ON t.assigned_to = u.user_id "
+                           "WHERE t.task_id = ?";
+
+    if (!stmt || mysql_stmt_prepare(stmt, sql_task, strlen(sql_task)) != 0) {
+        if (stmt) mysql_stmt_close(stmt);
+        send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
+        return;
+    }
+
+    MYSQL_BIND bind[1] = {0};
+    bind[0].buffer_type = MYSQL_TYPE_LONG;
+    bind[0].buffer = &task_id;
+    mysql_stmt_bind_param(stmt, bind);
+
+    if (mysql_stmt_execute(stmt) != 0) {
+        mysql_stmt_close(stmt);
+        send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
+        return;
+    }
+
+    mysql_stmt_store_result(stmt);
+    if (mysql_stmt_num_rows(stmt) == 0) {
+        mysql_stmt_close(stmt);
+        send_json_response(client, ERR_CREATE_TASK_VAL, "Task not found", NULL);
+        return;
+    }
+
+    // Bind task result
+    int pid, assigned_to;
+    char task_name[256], description[1024], status[64], assigned_user[128];
+    MYSQL_BIND res_bind[7] = {0};
+    res_bind[0].buffer_type = MYSQL_TYPE_LONG;   res_bind[0].buffer = &task_id;
+    res_bind[1].buffer_type = MYSQL_TYPE_LONG;   res_bind[1].buffer = &pid;
+    res_bind[2].buffer_type = MYSQL_TYPE_STRING; res_bind[2].buffer = task_name; res_bind[2].buffer_length = sizeof(task_name);
+    res_bind[3].buffer_type = MYSQL_TYPE_STRING; res_bind[3].buffer = description; res_bind[3].buffer_length = sizeof(description);
+    res_bind[4].buffer_type = MYSQL_TYPE_STRING; res_bind[4].buffer = status; res_bind[4].buffer_length = sizeof(status);
+    res_bind[5].buffer_type = MYSQL_TYPE_LONG;   res_bind[5].buffer = &assigned_to;
+    res_bind[6].buffer_type = MYSQL_TYPE_STRING; res_bind[6].buffer = assigned_user; res_bind[6].buffer_length = sizeof(assigned_user);
+    mysql_stmt_bind_result(stmt, res_bind);
+    mysql_stmt_fetch(stmt);
+    mysql_stmt_close(stmt);
+
+    // 2. Get comments with user info
+    MYSQL_STMT *cmt_stmt = mysql_stmt_init(conn);
+    const char *sql_cmt = "SELECT tc.comment_id, tc.user_id, u.username, tc.comment, tc.created_at "
+                          "FROM task_comments tc "
+                          "JOIN users u ON tc.user_id = u.user_id "
+                          "WHERE tc.task_id = ? "
+                          "ORDER BY tc.created_at ASC";
+
+    if (!cmt_stmt || mysql_stmt_prepare(cmt_stmt, sql_cmt, strlen(sql_cmt)) != 0) {
+        if (cmt_stmt) mysql_stmt_close(cmt_stmt);
+        send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
+        return;
+    }
+
+    MYSQL_BIND cmt_bind[1] = {0};
+    cmt_bind[0].buffer_type = MYSQL_TYPE_LONG;
+    cmt_bind[0].buffer = &task_id;
+    mysql_stmt_bind_param(cmt_stmt, cmt_bind);
+
+    if (mysql_stmt_execute(cmt_stmt) != 0) {
+        mysql_stmt_close(cmt_stmt);
+        send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
+        return;
+    }
+
+    mysql_stmt_store_result(cmt_stmt);
+    
+    // Build response
+    cJSON *response = cJSON_CreateObject();
+    
+    // Add task info
+    cJSON_AddNumberToObject(response, "task_id", task_id);
+    cJSON_AddNumberToObject(response, "project_id", pid);
+    cJSON_AddStringToObject(response, "task_name", task_name);
+    cJSON_AddStringToObject(response, "description", description);
+    cJSON_AddStringToObject(response, "status", status);
+    cJSON_AddNumberToObject(response, "assigned_to", assigned_to);
+    cJSON_AddStringToObject(response, "assigned_user", assigned_user);
+
+    // Add comments array
+    cJSON *comments_arr = cJSON_CreateArray();
+    
+    int cmt_id, cmt_user_id;
+    char cmt_username[128], comment_text[2048], created_at[64];
+    MYSQL_BIND cmt_res[5] = {0};
+    cmt_res[0].buffer_type = MYSQL_TYPE_LONG;   cmt_res[0].buffer = &cmt_id;
+    cmt_res[1].buffer_type = MYSQL_TYPE_LONG;   cmt_res[1].buffer = &cmt_user_id;
+    cmt_res[2].buffer_type = MYSQL_TYPE_STRING; cmt_res[2].buffer = cmt_username; cmt_res[2].buffer_length = sizeof(cmt_username);
+    cmt_res[3].buffer_type = MYSQL_TYPE_STRING; cmt_res[3].buffer = comment_text; cmt_res[3].buffer_length = sizeof(comment_text);
+    cmt_res[4].buffer_type = MYSQL_TYPE_STRING; cmt_res[4].buffer = created_at; cmt_res[4].buffer_length = sizeof(created_at);
+    mysql_stmt_bind_result(cmt_stmt, cmt_res);
+
+    while (mysql_stmt_fetch(cmt_stmt) == 0) {
+        cJSON *cmt_obj = cJSON_CreateObject();
+        cJSON_AddNumberToObject(cmt_obj, "comment_id", cmt_id);
+        cJSON_AddNumberToObject(cmt_obj, "user_id", cmt_user_id);
+        cJSON_AddStringToObject(cmt_obj, "username", cmt_username);
+        cJSON_AddStringToObject(cmt_obj, "comment", comment_text);
+        cJSON_AddStringToObject(cmt_obj, "created_at", created_at);
+        cJSON_AddItemToArray(comments_arr, cmt_obj);
+    }
+
+    cJSON_AddItemToObject(response, "comments", comments_arr);
+    mysql_stmt_close(cmt_stmt);
+
+    send_json_response(client, "112", "Task detail retrieved", response);
+    
+    write_server_log("[get_task_detail] user_id=%d task_id=%d comments_count=%d", user_id, task_id, cJSON_GetArraySize(comments_arr));
+}

@@ -79,6 +79,10 @@ def comment_task(session, task_id, comment):
     req = {"action": "comment_task", "session": session, "data": {"task_id": task_id, "comment": comment}}
     return send_request(req)
 
+def get_task_detail(session, task_id):
+    req = {"action": "get_task_detail", "session": session, "data": {"task_id": task_id}}
+    return send_request(req)
+
 def update_member(session, project_id, user_id, role):
     req = {"action": "update_member", "session": session, "data": {"project_id": project_id, "user_id": user_id, "role": role}}
     return send_request(req)
@@ -158,3 +162,18 @@ if __name__ == "__main__":
 
         print("=== UPDATE TASK STATUS (final) ===")
         print(update_task(session, task_id, "done"))
+
+        print("=== GET TASK DETAIL (with comments) ===")
+        task_detail = get_task_detail(session, task_id)
+        if task_detail.get("status") == "112":
+            data = task_detail.get("data", {})
+            print(f"Task ID: {data.get('task_id')}")
+            print(f"Task Name: {data.get('task_name')}")
+            print(f"Status: {data.get('status')}")
+            print(f"Assigned To: {data.get('assigned_user')} (user_id={data.get('assigned_to')})")
+            comments = data.get('comments', [])
+            print(f"Comments ({len(comments)}):")
+            for cmt in comments:
+                print(f"  - [{cmt.get('username')}] {cmt.get('comment')} (at {cmt.get('created_at')})")
+        else:
+            print(task_detail)
