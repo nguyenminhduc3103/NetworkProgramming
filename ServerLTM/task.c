@@ -133,16 +133,17 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *assign_to = cJSON_GetObjectItem(data, "assigned_to");
 
     if (!tid || !cJSON_IsNumber(tid) ||
-        !assign_to || !cJSON_IsNumber(assign_to)) {
+        !assign_to || !cJSON_IsString(assign_to)) {
         send_json_response(client, ERR_ASSIGN_TASK_VAL, "Missing fields", NULL);
         return;
     }
 
     int task_id = tid->valueint;
-    int assigned_user = assign_to->valueint;
+    const char *assigned_username = assign_to->valuestring;
+    int assigned_user_id = -1;
     int project_id = -1;
 
-    /* ===== 1. get project_id from task ===== */
+    /* ===== 1. Get project_id from task ===== */
     MYSQL_STMT *q = mysql_stmt_init(conn);
     const char *sql_q = "SELECT project_id FROM tasks WHERE task_id=?";
     MYSQL_BIND qb[1] = {0};
@@ -170,21 +171,51 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_fetch(q);
     mysql_stmt_close(q);
 
-    /* ===== 2. check PM permission ===== */
+    /* ===== 2. Check PM permission ===== */
     int my_role = db_get_user_role(conn, user_id, project_id);
     if (my_role != ROLE_PM) {
         send_json_response(client, ERR_ASSIGN_TASK_PERM, "Permission denied", NULL);
         return;
     }
 
-    /* ===== 3. assign task ===== */
+    /* ===== 3. Find user_id from username ===== */
+    MYSQL_STMT *su = mysql_stmt_init(conn);
+    const char *sql_user =
+        "SELECT user_id FROM users WHERE username=?";
+
+    MYSQL_BIND ub[1] = {0};
+    ub[0].buffer_type = MYSQL_TYPE_STRING;
+    ub[0].buffer = (char*)assigned_username;
+    ub[0].buffer_length = strlen(assigned_username);
+
+    mysql_stmt_prepare(su, sql_user, strlen(sql_user));
+    mysql_stmt_bind_param(su, ub);
+    mysql_stmt_execute(su);
+
+    MYSQL_BIND ur[1] = {0};
+    ur[0].buffer_type = MYSQL_TYPE_LONG;
+    ur[0].buffer = &assigned_user_id;
+
+    mysql_stmt_bind_result(su, ur);
+    mysql_stmt_store_result(su);
+
+    if (mysql_stmt_num_rows(su) == 0) {
+        mysql_stmt_close(su);
+        send_json_response(client, ERR_ASSIGN_TASK_VAL, "Assigned user not found", NULL);
+        return;
+    }
+
+    mysql_stmt_fetch(su);
+    mysql_stmt_close(su);
+
+    /* ===== 4. Assign task ===== */
     MYSQL_STMT *stmt = mysql_stmt_init(conn);
     const char *sql =
         "UPDATE tasks SET assigned_to=? WHERE task_id=?";
 
     MYSQL_BIND bind[2] = {0};
     bind[0].buffer_type = MYSQL_TYPE_LONG;
-    bind[0].buffer = &assigned_user;
+    bind[0].buffer = &assigned_user_id;
     bind[1].buffer_type = MYSQL_TYPE_LONG;
     bind[1].buffer = &task_id;
 
@@ -202,7 +233,8 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     cJSON *res = cJSON_CreateObject();
     cJSON_AddNumberToObject(res, "task_id", task_id);
-    cJSON_AddNumberToObject(res, "assigned_to", assigned_user);
+    cJSON_AddStringToObject(res, "assigned_to", assigned_username);
+    cJSON_AddNumberToObject(res, "assigned_user_id", assigned_user_id);
 
     send_json_response(client, RES_ASSIGN_TASK_OK, "Task assigned", res);
 }
