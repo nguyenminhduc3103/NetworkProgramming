@@ -88,9 +88,6 @@ def list_members(session, project_id):
     return send_request(req)
 
 if __name__ == "__main__":
-    print("=== REGISTER ===")
-    print(register("teonhe2", "123456"))
-
     print("=== LOGIN ===")
     resp = login("teonhe2", "123456")
     print(resp)
@@ -129,7 +126,7 @@ if __name__ == "__main__":
     create_resp = create_project(session, "TestProject2", "Project description")
     print(create_resp)
 
-    project_id = 1
+    project_id = 3
     if create_resp.get("status") == "105":
         project_id = create_resp.get("data", {}).get("project_id")
 

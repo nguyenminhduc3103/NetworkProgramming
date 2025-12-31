@@ -60,15 +60,17 @@ void handle_update_member(int client, cJSON *data, int user_id, MYSQL *conn) {
         return;
     }
 
-    char current_role[16];
+    int current_role_int;
     MYSQL_BIND res_chk[1];
     memset(res_chk, 0, sizeof(res_chk));
-    res_chk[0].buffer_type = MYSQL_TYPE_STRING; res_chk[0].buffer = current_role; res_chk[0].buffer_length = sizeof(current_role);
+    res_chk[0].buffer_type = MYSQL_TYPE_LONG; res_chk[0].buffer = &current_role_int;
     mysql_stmt_bind_result(chk, res_chk);
     mysql_stmt_fetch(chk);
     mysql_stmt_close(chk);
 
-    if (strcmp(current_role, role) == 0) {
+    // Convert incoming role to int for comparison
+    int incoming_role = (strcmp(role, "PM") == 0) ? ROLE_PM : ROLE_MEMBER;
+    if (current_role_int == incoming_role) {
         send_json_response(client, RES_UPDATE_MEMBER_OK, "Role unchanged", NULL);
         return;
     }
@@ -83,7 +85,7 @@ void handle_update_member(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     MYSQL_BIND bind[3];
     memset(bind, 0, sizeof(bind));
-    bind[0].buffer_type = MYSQL_TYPE_STRING; bind[0].buffer = role; bind[0].buffer_length = strlen(role);
+    bind[0].buffer_type = MYSQL_TYPE_LONG; bind[0].buffer = &incoming_role;
     bind[1].buffer_type = MYSQL_TYPE_LONG; bind[1].buffer = &project_id;
     bind[2].buffer_type = MYSQL_TYPE_LONG; bind[2].buffer = &target_user;
     mysql_stmt_bind_param(stmt, bind);
