@@ -125,31 +125,22 @@ void *client_thread(void *arg) {
 
         /* ===== Dispatch ===== */
         if (strcmp(act, "register") == 0) {
-            cJSON *un = cJSON_GetObjectItem(data, "username");
-            const char *uname = (un && cJSON_IsString(un)) ? un->valuestring : "unknown";
-            write_server_log("[DISPATCH] action=register username=%s", uname);
             handle_register_request(client, data, conn);
         }
         else if (strcmp(act, "login") == 0) {
-            cJSON *un = cJSON_GetObjectItem(data, "username");
-            const char *uname = (un && cJSON_IsString(un)) ? un->valuestring : "unknown";
-            write_server_log("[DISPATCH] action=login username=%s", uname);
             handle_login_request(client, data, conn);
         }
         else if (strcmp(act, "list_projects") == 0) {
-            write_server_log("[DISPATCH] action=list_projects user_id=%d username=%s", user_id, username);
             handle_list_projects(client, user_id, conn);
         }
         else if (strcmp(act, "search_project") == 0) {
             cJSON *pname = cJSON_GetObjectItem(data, "project_name");
             const char *pn = (pname && cJSON_IsString(pname)) ? pname->valuestring : "";
-            write_server_log("[DISPATCH] action=search_project user_id=%d search_term=%s", user_id, pn);
             handle_search_project(client, data, user_id, conn);
         }
         else if (strcmp(act, "create_project") == 0) {
             cJSON *pname = cJSON_GetObjectItem(data, "name");
             const char *pn = (pname && cJSON_IsString(pname)) ? pname->valuestring : "unknown";
-            write_server_log("[DISPATCH] action=create_project user_id=%d project_name=%s", user_id, pn);
             handle_create_project(client, data, user_id, conn);
         }
         else if (strcmp(act, "add_member") == 0) {
@@ -157,10 +148,8 @@ void *client_thread(void *arg) {
             const char *pmn = (pmem && cJSON_IsString(pmem)) ? pmem->valuestring : "";
             cJSON *prole = cJSON_GetObjectItem(data, "role");
             const char *pr = (prole && cJSON_IsString(prole)) ? prole->valuestring : "";
-            write_server_log("[DISPATCH] action=add_member user_id=%d new_member=%s role=%s", user_id, pmn, pr);
             if (require_role(client, conn, user_id, data, ROLE_PM,
                 ERR_ADD_MEMBER_PERM, ERR_ADD_MEMBER_VAL) < 0) {
-                write_server_log("[DISPATCH] add_member DENIED - permission denied");
                 cJSON_Delete(root);
                 continue;
             }
@@ -169,7 +158,6 @@ void *client_thread(void *arg) {
         else if (strcmp(act, "list_members") == 0) {
             cJSON *pid = cJSON_GetObjectItem(data, "project_id");
             int proj_id = (pid && cJSON_IsNumber(pid)) ? pid->valueint : -1;
-            write_server_log("[DISPATCH] action=list_members user_id=%d project_id=%d", user_id, proj_id);
             if (!data || !cJSON_IsObject(data)) {
                 send_json_response(client, ERR_MEMBER_VALIDATE, "Missing data", NULL);
                 cJSON_Delete(root);
@@ -181,7 +169,6 @@ void *client_thread(void *arg) {
         else if (strcmp(act, "list_tasks") == 0) {
             cJSON *pid = cJSON_GetObjectItem(data, "project_id");
             int proj_id = (pid && cJSON_IsNumber(pid)) ? pid->valueint : -1;
-            write_server_log("[DISPATCH] action=list_tasks user_id=%d project_id=%d", user_id, proj_id);
             if (!pid || !cJSON_IsNumber(pid)) {
                 send_json_response(client, ERR_PROJECT_VALIDATE, "Missing project_id", NULL);
                 cJSON_Delete(root);
@@ -202,10 +189,8 @@ void *client_thread(void *arg) {
             const char *tn = (tname && cJSON_IsString(tname)) ? tname->valuestring : "unknown";
             cJSON *pid = cJSON_GetObjectItem(data, "project_id");
             int proj_id = (pid && cJSON_IsNumber(pid)) ? pid->valueint : -1;
-            write_server_log("[DISPATCH] action=create_task user_id=%d project_id=%d task_name=%s", user_id, proj_id, tn);
             if (require_role(client, conn, user_id, data, ROLE_PM,
                 ERR_CREATE_TASK_PERM, ERR_CREATE_TASK_VAL) < 0) {
-                write_server_log("[DISPATCH] create_task DENIED - permission denied");
                 cJSON_Delete(root);
                 continue;
             }
@@ -216,7 +201,6 @@ void *client_thread(void *arg) {
             cJSON *ato = cJSON_GetObjectItem(data, "assigned_to");
             int task_id = (tid && cJSON_IsNumber(tid)) ? tid->valueint : -1;
             int assigned = (ato && cJSON_IsNumber(ato)) ? ato->valueint : -1;
-            write_server_log("[DISPATCH] action=assign_task user_id=%d task_id=%d assigned_to_user=%d", user_id, task_id, assigned);
             handle_assign_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "update_task") == 0) {
@@ -224,19 +208,16 @@ void *client_thread(void *arg) {
             cJSON *status = cJSON_GetObjectItem(data, "status");
             int task_id = (tid && cJSON_IsNumber(tid)) ? tid->valueint : -1;
             const char *st = (status && cJSON_IsString(status)) ? status->valuestring : "";
-            write_server_log("[DISPATCH] action=update_task user_id=%d task_id=%d new_status=%s", user_id, task_id, st);
             handle_update_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "comment_task") == 0) {
             cJSON *tid = cJSON_GetObjectItem(data, "task_id");
             int task_id = (tid && cJSON_IsNumber(tid)) ? tid->valueint : -1;
-            write_server_log("[DISPATCH] action=comment_task user_id=%d task_id=%d", user_id, task_id);
             handle_comment_task(client, data, user_id, conn);
         }
         else if (strcmp(act, "get_task_detail") == 0) {
             cJSON *tid = cJSON_GetObjectItem(data, "task_id");
             int task_id = (tid && cJSON_IsNumber(tid)) ? tid->valueint : -1;
-            write_server_log("[DISPATCH] action=get_task_detail user_id=%d task_id=%d", user_id, task_id);
             handle_get_task_detail(client, data, user_id, conn);
         }
         else if (strcmp(act, "update_member") == 0) {
@@ -246,17 +227,14 @@ void *client_thread(void *arg) {
             const char *pr = (prole && cJSON_IsString(prole)) ? prole->valuestring : "";
             cJSON *pid = cJSON_GetObjectItem(data, "project_id");
             int proj_id = (pid && cJSON_IsNumber(pid)) ? pid->valueint : -1;
-            write_server_log("[DISPATCH] action=update_member user_id=%d project_id=%d member=%s new_role=%s", user_id, proj_id, pmn, pr);
             if (require_role(client, conn, user_id, data, ROLE_PM,
                 ERR_MEMBER_PERMISSION, ERR_MEMBER_VALIDATE) < 0) {
-                write_server_log("[DISPATCH] update_member DENIED - permission denied");
                 cJSON_Delete(root);
                 continue;
             }
             handle_update_member(client, data, user_id, conn);
         }
         else {
-            write_server_log("[DISPATCH] unknown action: %s", act);
             send_json_response(client, S_LOGIN_ERR, "Unknown action", NULL);
         }
 
@@ -314,8 +292,7 @@ int main() {
         // Get client IP and port
         inet_ntop(AF_INET, &cli.sin_addr, client_info->ip_addr, sizeof(client_info->ip_addr));
         client_info->port = ntohs(cli.sin_port);
-        
-        write_server_log("Client connected");
+        write_server_log("Client connected from %s:%d", client_info->ip_addr, client_info->port);
 
         pthread_t tid;
         if (pthread_create(&tid, NULL, client_thread, client_info) != 0) {

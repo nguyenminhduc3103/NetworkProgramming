@@ -127,16 +127,17 @@ int db_get_user_role(MYSQL *conn, int user_id, int project_id) {
         return ROLE_NONE;
     }
 
-    char role[16];
+    int role_val = ROLE_NONE;
     MYSQL_BIND r[1];
     memset(r, 0, sizeof(r));
-    r[0].buffer_type = MYSQL_TYPE_STRING;
-    r[0].buffer = role;
-    r[0].buffer_length = sizeof(role);
+    r[0].buffer_type = MYSQL_TYPE_LONG;
+    r[0].buffer = &role_val;
     mysql_stmt_bind_result(stmt, r);
     mysql_stmt_fetch(stmt);
     mysql_stmt_close(stmt);
 
-    if (strcmp(role, "PM") == 0) return ROLE_PM;
-    return ROLE_MEMBER;
+    /* Map numeric role values (stored as INT) back to enums */
+    if (role_val == ROLE_PM) return ROLE_PM;
+    if (role_val == ROLE_MEMBER) return ROLE_MEMBER;
+    return ROLE_NONE;
 }

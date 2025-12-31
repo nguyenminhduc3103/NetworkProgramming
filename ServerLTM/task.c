@@ -6,11 +6,13 @@
 #include <string.h>
 #include <stdlib.h>
 #include <mysql/mysql.h>
+#include <stdbool.h>
 
 /* ===== LIST TASKS ===== */
 void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *pid = cJSON_GetObjectItem(data, "project_id");
     if (!pid || !cJSON_IsNumber(pid)) {
+        write_server_log("[list_tasks] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_PROJECT_VALIDATE);
         send_json_response(client, ERR_PROJECT_VALIDATE, "Missing project_id", NULL);
         return;
     }
@@ -19,9 +21,11 @@ void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     MYSQL_STMT *stmt = mysql_stmt_init(conn);
     const char *sql =
-        "SELECT task_id, task_name, description, assigned_to, status "
-        "FROM tasks WHERE project_id=?";
+        "SELECT t.task_id, t.task_name, t.description, t.assigned_to, t.status, u.username "
+        "FROM tasks t LEFT JOIN users u ON t.assigned_to = u.user_id "
+        "WHERE t.project_id=?";
     if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {
+        write_server_log("[list_tasks] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_LIST_TASK_SERVER);
         send_json_response(client, ERR_LIST_TASK_SERVER, "Server error", NULL);
         if (stmt) mysql_stmt_close(stmt);
         return;
@@ -33,6 +37,7 @@ void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(stmt, bind);
 
     if (mysql_stmt_execute(stmt) != 0) {
+        write_server_log("[list_tasks] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_LIST_TASK_SERVER);
         send_json_response(client, ERR_LIST_TASK_SERVER, "Server error", NULL);
         mysql_stmt_close(stmt);
         return;
@@ -40,9 +45,10 @@ void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     mysql_stmt_store_result(stmt);
 
-    MYSQL_BIND res[5];
+    MYSQL_BIND res[6];
     int task_id, assigned_to;
-    char task_name[256], description[1024], status[32];
+    char task_name[256], description[1024], status[32], assigned_username[128];
+    bool assigned_username_is_null;
     memset(res, 0, sizeof(res));
 
     res[0].buffer_type = MYSQL_TYPE_LONG;   res[0].buffer = &task_id;
@@ -50,17 +56,20 @@ void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
     res[2].buffer_type = MYSQL_TYPE_STRING; res[2].buffer = description; res[2].buffer_length = sizeof(description);
     res[3].buffer_type = MYSQL_TYPE_LONG;   res[3].buffer = &assigned_to;
     res[4].buffer_type = MYSQL_TYPE_STRING; res[4].buffer = status;     res[4].buffer_length = sizeof(status);
+    res[5].buffer_type = MYSQL_TYPE_STRING; res[5].buffer = assigned_username; res[5].buffer_length = sizeof(assigned_username); res[5].is_null = &assigned_username_is_null;
 
     mysql_stmt_bind_result(stmt, res);
 
     cJSON *tasks = cJSON_CreateArray();
     while (mysql_stmt_fetch(stmt) == 0) {
+        if (assigned_username_is_null) assigned_username[0] = '\0';
         cJSON *task = cJSON_CreateObject();
         cJSON_AddNumberToObject(task, "task_id", task_id);
         cJSON_AddStringToObject(task, "task_name", task_name);
         cJSON_AddStringToObject(task, "description", description);
         cJSON_AddNumberToObject(task, "assigned_to", assigned_to);
         cJSON_AddStringToObject(task, "status", status);
+        cJSON_AddStringToObject(task, "assigned_to_username", assigned_username);
         cJSON_AddItemToArray(tasks, task);
     }
 
@@ -70,6 +79,7 @@ void handle_list_tasks(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON_AddNumberToObject(res_data, "project_id", project_id);
     cJSON_AddItemToObject(res_data, "tasks", tasks);
 
+    write_server_log("[list_tasks] Action: User: project_id=%d status=SUCCESS user_id=%d response=%s", project_id, user_id, RES_LIST_TASK_OK);
     send_json_response(client, RES_LIST_TASK_OK, "List tasks success", res_data);
 }
 
@@ -80,7 +90,7 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *tname = cJSON_GetObjectItem(data, "task_name");
     cJSON *desc = cJSON_GetObjectItem(data, "description");
 
-    if (!pid || !cJSON_IsNumber(pid) || !tname || !cJSON_IsString(tname)) {
+    if (!pid || !cJSON_IsNumber(pid) || !tname || !cJSON_IsString(tname)) {        write_server_log("[update_task] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_UPDATE_TASK_VAL);        write_server_log("[create_task] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_CREATE_TASK_VAL);
         send_json_response(client, ERR_CREATE_TASK_VAL, "Missing fields", NULL);
         return;
     }
@@ -88,19 +98,22 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     int project_id = pid->valueint;
     char *description = (desc && cJSON_IsString(desc)) ? desc->valuestring : "";
     char status[] = "in_progress";
+    int assigned_to = 0;
+    bool assigned_to_is_null = 1;
 
     MYSQL_STMT *stmt = mysql_stmt_init(conn);
     const char *sql =
-        "INSERT INTO tasks(project_id, task_name, description, status) "
-        "VALUES(?,?,?,?)";
+        "INSERT INTO tasks(project_id, task_name, description, status, assigned_to) "
+        "VALUES(?,?,?,?,?)";
 
     if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {
+        write_server_log("[create_task] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_CREATE_TASK_SERVER);
         send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
         if (stmt) mysql_stmt_close(stmt);
         return;
     }
 
-    MYSQL_BIND bind[4] = {0};
+    MYSQL_BIND bind[5] = {0};
     bind[0].buffer_type = MYSQL_TYPE_LONG;   bind[0].buffer = &project_id;
     bind[1].buffer_type = MYSQL_TYPE_STRING; bind[1].buffer = tname->valuestring;
     bind[1].buffer_length = strlen(tname->valuestring);
@@ -108,10 +121,14 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     bind[2].buffer_length = strlen(description);
     bind[3].buffer_type = MYSQL_TYPE_STRING; bind[3].buffer = status;
     bind[3].buffer_length = strlen(status);
+    bind[4].buffer_type = MYSQL_TYPE_LONG;
+    bind[4].buffer = &assigned_to;
+    bind[4].is_null = &assigned_to_is_null;
 
     mysql_stmt_bind_param(stmt, bind);
 
     if (mysql_stmt_execute(stmt) != 0) {
+        write_server_log("[create_task] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_CREATE_TASK_SERVER);
         send_json_response(client, ERR_CREATE_TASK_SERVER, "Server error", NULL);
         mysql_stmt_close(stmt);
         return;
@@ -124,7 +141,7 @@ void handle_create_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON_AddNumberToObject(res, "project_id", project_id);
     cJSON_AddNumberToObject(res, "task_id", task_id);
     
-    write_server_log("[create_task] user_id=%d project_id=%d task_id=%d task_name=%s", user_id, project_id, task_id, tname->valuestring);
+    write_server_log("[create_task] Action: User: task_id=%d status=SUCCESS user_id=%d response=%s", task_id, user_id, RES_CREATE_TASK_OK);
 
     send_json_response(client, RES_CREATE_TASK_OK, "Task created", res);
 }
@@ -136,6 +153,7 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     if (!tid || !cJSON_IsNumber(tid) ||
         !assign_to || !cJSON_IsString(assign_to)) {
+        write_server_log("[assign_task] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_ASSIGN_TASK_VAL);
         send_json_response(client, ERR_ASSIGN_TASK_VAL, "Missing fields", NULL);
         return;
     }
@@ -175,8 +193,7 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     /* ===== 2. Check PM permission ===== */
     int my_role = db_get_user_role(conn, user_id, project_id);
-    if (my_role != ROLE_PM) {
-        send_json_response(client, ERR_ASSIGN_TASK_PERM, "Permission denied", NULL);
+    if (my_role != ROLE_PM) {        write_server_log("[assign_task] Action: User: task_id=%d status=FAILED user_id=%d response=%s", task_id, user_id, ERR_ASSIGN_TASK_PERM);        send_json_response(client, ERR_ASSIGN_TASK_PERM, "Permission denied", NULL);
         return;
     }
 
@@ -238,6 +255,7 @@ void handle_assign_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON_AddStringToObject(res, "assigned_to", assigned_username);
     cJSON_AddNumberToObject(res, "assigned_user_id", assigned_user_id);
 
+    write_server_log("[assign_task] Action: User: task_id=%d status=SUCCESS user_id=%d response=%s", task_id, user_id, RES_ASSIGN_TASK_OK);
     send_json_response(client, RES_ASSIGN_TASK_OK, "Task assigned", res);
 }
 
@@ -294,8 +312,7 @@ void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn) {
         return;
     }
 
-    if (role != ROLE_PM && assigned_to != user_id) {
-        send_json_response(client, ERR_UPDATE_TASK_PERM, "Permission denied", NULL);
+    if (role != ROLE_PM && assigned_to != user_id) {        write_server_log("[update_task] Action: User: task_id=%d status=FAILED user_id=%d response=%s", task_id, user_id, ERR_UPDATE_TASK_PERM);        send_json_response(client, ERR_UPDATE_TASK_PERM, "Permission denied", NULL);
         return;
     }
 
@@ -326,6 +343,7 @@ void handle_update_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON_AddNumberToObject(res, "task_id", task_id);
     cJSON_AddStringToObject(res, "status", stat);
 
+    write_server_log("[update_task] Action: User: task_id=%d status=SUCCESS user_id=%d response=%s", task_id, user_id, RES_UPDATE_TASK_OK);
     send_json_response(client, RES_UPDATE_TASK_OK, "Task updated", res);
 }
 
@@ -374,8 +392,7 @@ void handle_comment_task(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     /* ===== 2. Check MEMBER permission ===== */
     int role = db_get_user_role(conn, user_id, project_id);
-    if (role <= ROLE_NONE) {
-        send_json_response(client, ERR_COMMENT_TASK_PERM, "Permission denied", NULL);
+    if (role <= ROLE_NONE) {        write_server_log("[comment_task] Action: User: task_id=%d status=FAILED user_id=%d response=%s", task_id, user_id, ERR_COMMENT_TASK_PERM);        send_json_response(client, ERR_COMMENT_TASK_PERM, "Permission denied", NULL);
         return;
     }
 
@@ -396,6 +413,7 @@ void handle_comment_task(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     if (mysql_stmt_execute(stmt) != 0) {
         mysql_stmt_close(stmt);
+        write_server_log("[comment_task] Action: User: task_id=%d status=FAILED user_id=%d response=%s", task_id, user_id, ERR_COMMENT_TASK_SERVER);
         send_json_response(client, ERR_COMMENT_TASK_SERVER, "Comment failed", NULL);
         return;
     }
@@ -405,6 +423,7 @@ void handle_comment_task(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *res = cJSON_CreateObject();
     cJSON_AddNumberToObject(res, "task_id", task_id);
 
+    write_server_log("[comment_task] Action: User: task_id=%d status=SUCCESS user_id=%d response=%s", task_id, user_id, RES_COMMENT_TASK_OK);
     send_json_response(client, RES_COMMENT_TASK_OK, "Comment added", res);
 }
 
@@ -445,8 +464,7 @@ void handle_get_task_detail(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     mysql_stmt_store_result(stmt);
     if (mysql_stmt_num_rows(stmt) == 0) {
-        mysql_stmt_close(stmt);
-        send_json_response(client, ERR_CREATE_TASK_VAL, "Task not found", NULL);
+        mysql_stmt_close(stmt);        write_server_log("[assign_task] Action: User: task_id=%d status=FAILED user_id=%d response=%s", task_id, user_id, ERR_ASSIGN_TASK_VAL);        send_json_response(client, ERR_CREATE_TASK_VAL, "Task not found", NULL);
         return;
     }
 
@@ -530,6 +548,7 @@ void handle_get_task_detail(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON_AddItemToObject(response, "comments", comments_arr);
     mysql_stmt_close(cmt_stmt);
 
+    write_server_log("[get_task_detail] Action: User: task_id=%d status=SUCCESS user_id=%d response=112", task_id, user_id);
     send_json_response(client, "112", "Task detail retrieved", response);
     
     write_server_log("[get_task_detail] user_id=%d task_id=%d comments_count=%d", user_id, task_id, cJSON_GetArraySize(comments_arr));

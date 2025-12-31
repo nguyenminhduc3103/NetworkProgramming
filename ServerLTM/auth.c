@@ -29,7 +29,7 @@ void handle_register_request(int client, cJSON *data, MYSQL *conn) {
     if (!username || !password || strlen(username) == 0 || strlen(password) == 0) {
         send_json_response(client, S_REG_ERR, "Invalid input", NULL);
         db_log(conn, -1, "register", "{\"error\":\"invalid_input\"}", "{\"status\":\"132\"}");
-        write_server_log("[register] invalid input");
+        write_server_log("[register] Action: User: %s status=FAILED response=%s", username ? username : "unknown", S_REG_ERR);
         return;
     }
 
@@ -39,7 +39,7 @@ void handle_register_request(int client, cJSON *data, MYSQL *conn) {
     if (!stmt || mysql_stmt_prepare(stmt, sel_sql, strlen(sel_sql)) != 0) {
         send_json_response(client, S_REG_SRV, "Server error", NULL);
         db_log(conn, -1, "register", username, "{\"status\":\"502\"}");
-        write_server_log("[register] prepare/select failed");
+        write_server_log("[register] Action: User: %s status=FAILED response=%s", username, S_REG_SRV);
         if (stmt) mysql_stmt_close(stmt);
         return;
     }
@@ -62,7 +62,7 @@ void handle_register_request(int client, cJSON *data, MYSQL *conn) {
     if (rows > 0) {
         send_json_response(client, S_REG_CFL, "Username exists", NULL);
         db_log(conn, -1, "register", username, "{\"status\":\"162\"}");
-        write_server_log("[register] username exists: %s", username);
+        write_server_log("[register] Action: User: %s status=FAILED response=%s", username, S_REG_CFL);
         return;
     }
 
@@ -88,7 +88,7 @@ void handle_register_request(int client, cJSON *data, MYSQL *conn) {
     if (mysql_stmt_execute(ins) != 0) {
         send_json_response(client, S_REG_SRV, "Server error", NULL);
         db_log(conn, -1, "register", username, "{\"status\":\"502\"}");
-        write_server_log("[register] insert failed: %s", mysql_error(conn));
+        write_server_log("[register] Action: User: %s status=FAILED response=%s", username, S_REG_SRV);
         mysql_stmt_close(ins);
         return;
     }
@@ -96,7 +96,7 @@ void handle_register_request(int client, cJSON *data, MYSQL *conn) {
 
     send_json_response(client, S_REG_OK, "Register successful", NULL);
     db_log(conn, -1, "register", username, "{\"status\":\"102\"}");
-    write_server_log("[register] created user: %s", username);
+    write_server_log("[register] Action: User: %s status=SUCCESS response=%s", username, S_REG_OK);
 }
 
 /* LOGIN: verify password, create session token, store in sessions table, return token */
@@ -107,7 +107,7 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
     if (!username || !password) {
         send_json_response(client, S_LOGIN_ERR, "Missing input", NULL);
         db_log(conn, -1, "login", "{\"error\":\"missing_input\"}", "{\"status\":\"131\"}");
-        write_server_log("[login] FAILED - missing_input username=%s", username ? username : "null");
+        write_server_log("[login] Action: User: %s status=FAILED response=%s", username ? username : "null", S_LOGIN_ERR);
         return;
     }
 
@@ -142,7 +142,7 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
         send_json_response(client, S_LOGIN_NF, "Invalid login", NULL);
         db_log(conn, -1, "login", username, "{\"status\":\"151\"}");
         mysql_stmt_close(stmt);
-        write_server_log("[login] FAILED - invalid_credentials username=%s reason=user_not_found_or_wrong_password", username);
+        write_server_log("[login] Action: User: %s status=FAILED response=%s", username, S_LOGIN_NF);
         return;
     }
 
@@ -203,5 +203,5 @@ void handle_login_request(int client, cJSON *data, MYSQL *conn) {
     cJSON_AddStringToObject(d, "session", token);
     send_json_response(client, S_LOGIN_OK, "Login successful", d);
     db_log(conn, user_id, "login", username, "{\"status\":\"101\"}");
-    write_server_log("[login] SUCCESS user_id=%d username=%s session_created=true", user_id, username);
+    write_server_log("[login] Action: User: %s status=SUCCESS user_id=%d response=%s", username, user_id, S_LOGIN_OK);
 }

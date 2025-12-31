@@ -97,5 +97,6 @@ void handle_update_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     }
 
     mysql_stmt_close(stmt);
+    write_server_log("[update_member] Action: User: project_id=%d status=SUCCESS user_id=%d response=%s", project_id, user_id, RES_UPDATE_MEMBER_OK);
     send_json_response(client, RES_UPDATE_MEMBER_OK, "Member role updated", NULL);
 }
