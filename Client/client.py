@@ -5,7 +5,7 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-SERVER_HOST = "172.18.215.152"
+SERVER_HOST = "172.31.245.233"
 SERVER_PORT = 8080
 
 STATUS_MAP = {
