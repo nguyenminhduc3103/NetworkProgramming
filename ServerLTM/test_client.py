@@ -71,6 +71,9 @@ def update_member(session, project_id, user_id, role):
     req = {"action": "update_member", "session": session, "data": {"project_id": project_id, "user_id": user_id, "role": role}}
     return send_request(req)
 
+def list_members(session, project_id):
+    req = {"action": "list_members", "session": session, "data": {"project_id": project_id}}
+    return send_request(req)
 
 if __name__ == "__main__":
     print("=== REGISTER ===")
@@ -100,6 +103,9 @@ if __name__ == "__main__":
         print("=== ADD MEMBER ===")
         print(add_member(session, project_id, "teonhe1", "MEMBER"))
 
+        print("=== LIST MEMBERS ===")
+        print(list_members(session, project_id))
+
         print("=== LIST TASKS ===")
         print(list_tasks(session, project_id))
 
@@ -113,11 +119,11 @@ if __name__ == "__main__":
             print("=== ASSIGN TASK ===")
             print(assign_task(session, task_id, 2))
 
-            print("=== UPDATE TASK ===")
+            print("=== UPDATE TASK (PM/assignee) ===")
             print(update_task(session, task_id, "in_progress"))
 
             print("=== COMMENT TASK ===")
             print(comment_task(session, task_id, "This is a comment."))
 
-        print("=== UPDATE MEMBER ===")
-        print(update_member(session, project_id, 1, "PM"))
+        print("=== UPDATE TASK STATUS (final) ===")
+        print(update_task(session, task_id, "done"))

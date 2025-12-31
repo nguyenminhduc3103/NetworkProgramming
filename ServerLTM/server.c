@@ -119,6 +119,15 @@ void *client_thread(void *arg) {
             }
             handle_add_member(client, data, user_id, conn);
         }
+        else if (strcmp(act, "list_members") == 0) {
+            if (!data || !cJSON_IsObject(data)) {
+                send_json_response(client, ERR_MEMBER_VALIDATE, "Missing data", NULL);
+                cJSON_Delete(root);
+                continue;
+            }
+
+            handle_list_members(client, data, user_id, conn);
+        }
         else if (strcmp(act, "list_tasks") == 0) {
             cJSON *pid = cJSON_GetObjectItem(data, "project_id");
             if (!pid || !cJSON_IsNumber(pid)) {
