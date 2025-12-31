@@ -5,7 +5,7 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-SERVER_HOST = "172.31.245.233"
+SERVER_HOST = "172.18.215.152"
 SERVER_PORT = 8080
 
 STATUS_MAP = {
@@ -207,7 +207,7 @@ with tab2:
                                           ["todo", "in_progress", "done", "blocked"],
                                           key="status_select")
                 if st.button("Cập nhật trạng thái"):
-                    res = send_request("update_task_status", st.session_state.session, 
+                    res = send_request("update_task", st.session_state.session, 
                                       {"task_id": task['task_id'], "status": new_status})
                     show_message(res, "110")
 
@@ -215,7 +215,7 @@ with tab2:
                 assign_user = st.text_input("Username người nhận", placeholder="Nhập username...")
                 if st.button("Xác nhận gán việc"):
                     res = send_request("assign_task", st.session_state.session, 
-                                      {"task_id": task['task_id'], "username": assign_user})
+                                      {"task_id": task['task_id'], "assigned_to": assign_user})
                     show_message(res, "109")
 
             with action_col2:
@@ -242,7 +242,7 @@ with tab2:
                 new_t_desc = st.text_area("Mô tả Task")
                 if st.form_submit_button("Tạo Task"):
                     res = send_request("create_task", st.session_state.session, 
-                                      {"project_id": prj['project_id'], "name": new_t_name, "description": new_t_desc})
+                                      {"project_id": prj['project_id'], "task_name": new_t_name, "description": new_t_desc})
                     show_message(res, "108")
 
 with tab3:
