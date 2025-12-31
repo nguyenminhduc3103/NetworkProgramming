@@ -5,7 +5,7 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-SERVER_HOST = "172.18.215.152"
+SERVER_HOST = "172.31.245.233"
 SERVER_PORT = 8080
 
 STATUS_MAP = {
@@ -57,6 +57,7 @@ def send_request(action, session="", data={}):
             if b"\r\n" in buffer:
                 resp_bytes = buffer.split(b"\r\n")[0]
                 print(resp_bytes)
+                print(" ")
                 return json.loads(resp_bytes.decode("utf-8"))
     return {"status": "error", "message": "No response"}
 
@@ -135,7 +136,7 @@ with st.sidebar:
     st.title(f"👤 {st.session_state.username}")
     
     if st.session_state.selected_project:
-        st.success(f"**Dự án hiện tại:**")
+        st.success(f"*Dự án hiện tại:*")
         st.info(f"📂 {st.session_state.selected_project['project_name']}")
         if st.button("🔄 Đổi dự án", use_container_width=True):
             st.session_state.selected_project = None
@@ -187,7 +188,7 @@ if not st.session_state.selected_project:
             with cols[idx % 2]:
                 with st.container(border=True):
                     st.markdown(f"### 📁 {p.get('project_name')}")
-                    st.caption(f"ID: `{p.get('project_id')}`")
+                    st.caption(f"ID: {p.get('project_id')}")
                     if st.button("➡️ Mở dự án", key=f"open_{p.get('project_id')}", use_container_width=True):
                         st.session_state.selected_project = p
                         # Tự động tải tasks khi chọn dự án
@@ -196,7 +197,7 @@ if not st.session_state.selected_project:
 
     # Create new project
     st.divider()
-    with st.expander("➕ **Tạo dự án mới**"):
+    with st.expander("➕ *Tạo dự án mới*"):
         with st.form("new_project_form"):
             pname = st.text_input("Tên dự án")
             pdesc = st.text_area("Mô tả")
@@ -223,36 +224,48 @@ else:
     # TAB 1: CÔNG VIỆC
     # ============================
     with tab1:
-        # Header actions
-        col1, col3, col4 = st.columns([2, 1, 1])
+        col1, col3, col4 = st.columns([2,1,1])
         with col1:
             st.markdown("### Danh sách Task")
         with col3:
-            if st.button("🔄 Làm mới", use_container_width=True, key="refresh_tasks"):
+            if st.button("🔄 Làm mới", use_container_width=True):
                 load_tasks(prj['project_id'])
                 st.rerun()
         with col4:
-            create_task = st.button("➕ Task mới", use_container_width=True, type="primary")
-        
+            if st.button("➕ Task mới", use_container_width=True, type="primary"):
+                st.session_state.show_create_task = True
+
         st.divider()
-        
-        # Create task modal
-        if create_task:
+
+        # nếu chưa có state thì init
+        if "show_create_task" not in st.session_state:
+            st.session_state.show_create_task = False
+
+        if st.session_state.show_create_task:
             with st.form("quick_create_task"):
                 st.markdown("#### ➕ Tạo Task mới")
+
                 new_t_name = st.text_input("Tên task")
                 new_t_desc = st.text_area("Mô tả")
-                col_submit, col_cancel = st.columns(2)
-                if col_submit.form_submit_button("✅ Tạo", use_container_width=True):
-                    if new_t_name:
-                        res = send_request("create_task", st.session_state.session, 
-                                          {"project_id": prj['project_id'], "task_name": new_t_name, "description": new_t_desc})
-                        if show_message(res, "108"):
-                            load_tasks(prj['project_id'])
-                            st.rerun()
-                    else:
-                        st.warning("Vui lòng nhập tên task!")
-        
+
+                submit = st.form_submit_button("✅ Tạo", use_container_width=True)
+
+            if submit:
+                res = send_request(
+                    "create_task",
+                    st.session_state.session,
+                    {
+                        "project_id": prj['project_id'],
+                        "task_name": new_t_name,
+                        "description": new_t_desc
+                    }
+                )
+
+                if show_message(res, "108"):
+                    st.session_state.show_create_task = False
+                    load_tasks(prj['project_id'])
+                    st.rerun()
+
         # Display tasks
         if not st.session_state.tasks_list:
             st.info("📭 Dự án chưa có task nào. Hãy tạo task đầu tiên!")
@@ -265,8 +278,8 @@ else:
                     col_info, col_status, col_action = st.columns([4, 2, 1])
                     
                     with col_info:
-                        st.markdown(f"**{task.get('task_name')}**")
-                        st.caption(f"ID: `{task.get('task_id')}`")
+                        st.markdown(f"*{task.get('task_name')}*")
+                        st.caption(f"ID: {task.get('task_id')}")
                         if task.get('assigned_to'):
                             st.caption(f"👤 {task.get('assigned_to')}")
                     
@@ -305,7 +318,7 @@ else:
                         st.session_state.selected_task = None
                         st.rerun()
                 
-                st.caption(f"Task ID: `{task.get('task_id')}`")
+                st.caption(f"Task ID: {task.get('task_id')}")
                 
                 # Task details in columns
                 col_left, col_right = st.columns(2)
@@ -372,40 +385,63 @@ else:
         col_header, col_refresh, col_add = st.columns([3, 1, 1])
         with col_header:
             st.markdown("### Danh sách thành viên")
+
         with col_refresh:
             if st.button("🔄 Làm mới", key="refresh_members", use_container_width=True):
                 res = send_request("list_members", st.session_state.session, {"project_id": prj['project_id']})
                 if res.get("status") == "269":
                     st.session_state.members_list = res.get("data", [])
                     st.toast("Đã cập nhật danh sách thành viên")
+
         with col_add:
-            show_add_form = st.button("➕ Thêm", key="add_member_btn", use_container_width=True, type="primary")
-        
+            if st.button("➕ Thêm", key="add_member_btn", use_container_width=True, type="primary"):
+                st.session_state.show_add_member = True
+
         st.divider()
-        
+
+        # init state
+        if "show_add_member" not in st.session_state:
+            st.session_state.show_add_member = False
+
         # Add member form
-        if show_add_form:
+        if st.session_state.show_add_member:
             with st.form("add_member_form"):
                 st.markdown("#### ➕ Thêm thành viên mới")
+
                 new_mem_user = st.text_input("Username")
                 new_mem_role = st.selectbox("Vai trò", ["MEMBER", "DEV", "PM"])
-                
+
                 col_submit, col_cancel = st.columns(2)
-                if col_submit.form_submit_button("✅ Thêm", use_container_width=True):
-                    if new_mem_user:
-                        res = send_request("add_member", st.session_state.session, {
+
+                submit = col_submit.form_submit_button("✅ Thêm", use_container_width=True)
+                cancel = col_cancel.form_submit_button("❌ Hủy", use_container_width=True)
+
+            if cancel:
+                st.session_state.show_add_member = False
+                st.rerun()
+
+            if submit:
+                if not new_mem_user:
+                    st.error("Vui lòng nhập Username")
+                else:
+                    res = send_request(
+                        "add_member",
+                        st.session_state.session,
+                        {
                             "project_id": prj['project_id'],
                             "username": new_mem_user,
                             "role": new_mem_role
-                        })
-                        if show_message(res, "106"):
-                            # Refresh members list
-                            res2 = send_request("list_members", st.session_state.session, {"project_id": prj['project_id']})
-                            if res2.get("status") == "269":
-                                st.session_state.members_list = res2.get("data", [])
-                            st.rerun()
-                    else:
-                        st.error("Vui lòng nhập Username")
+                        }
+                    )
+
+                    if show_message(res, "106"):
+                        # Refresh members list
+                        res2 = send_request("list_members", st.session_state.session, {"project_id": prj['project_id']})
+                        if res2.get("status") == "269":
+                            st.session_state.members_list = res2.get("data", [])
+
+                        st.session_state.show_add_member = False
+                        st.rerun()
         
         # Display members
         members = st.session_state.get("members_list", [])
@@ -417,7 +453,7 @@ else:
                     col_user, col_role, col_action = st.columns([3, 2, 1])
                     
                     with col_user:
-                        st.markdown(f"**👤 {mem.get('username')}**")
+                        st.markdown(f"👤 {mem.get('username')}")
                         st.caption(f"ID: {mem.get('user_id')}")
                     
                     with col_role:
@@ -470,7 +506,7 @@ else:
                     st.session_state.task_detail = None
                     st.rerun()
             
-            st.caption(f"Task ID: `{detail.get('task_id')}` | Project ID: `{detail.get('project_id')}`")
+            st.caption(f"Task ID: {detail.get('task_id')} | Project ID: {detail.get('project_id')}")
             st.divider()
             
             # 2. Thông tin chi tiết
@@ -478,22 +514,22 @@ else:
             
             with col_left:
                 st.markdown("#### 📊 Thông tin chung")
-                st.markdown(f"**Tên task:** {detail.get('task_name')}")
-                st.markdown(f"**Mô tả:** {detail.get('description') or 'Chưa có mô tả'}")
+                st.markdown(f"*Tên task:* {detail.get('task_name')}")
+                st.markdown(f"*Mô tả:* {detail.get('description') or 'Chưa có mô tả'}")
                 
                 # Áp dụng màu sắc cho status nếu bạn có dict TASK_STATUS
                 status_raw = detail.get('status', 'todo')
-                st.markdown(f"**Trạng thái:** `{status_raw.upper()}`")
+                st.markdown(f"*Trạng thái:* {status_raw.upper()}")
                 
                 # Hiển thị tên người thực hiện (assigned_user) thay vì ID
-                st.markdown(f"**Người thực hiện:** {detail.get('assigned_user', 'Chưa gán')}")
+                st.markdown(f"*Người thực hiện:* {detail.get('assigned_user', 'Chưa gán')}")
                 
             with col_right:
                 st.markdown("#### 📅 Thông tin khác")
                 # Vì server hiện tại chưa trả về created_at của task (chỉ có của comment), 
                 # nên ta tạm để N/A hoặc bổ sung sau
-                st.markdown(f"**Ngày tạo:** {detail.get('created_at', 'N/A')}")
-                st.markdown(f"**Deadline:** {detail.get('deadline', 'Chưa có')}")
+                st.markdown(f"*Ngày tạo:* {detail.get('created_at', 'N/A')}")
+                st.markdown(f"*Deadline:* {detail.get('deadline', 'Chưa có')}")
             
             st.divider()
             
@@ -508,7 +544,7 @@ else:
                     with st.container(border=True):
                         col_user, col_time = st.columns([3, 1.5])
                         with col_user:
-                            st.markdown(f"**👤 {comment.get('username')}**")
+                            st.markdown(f"👤 {comment.get('username')}")
                         with col_time:
                             # Map key 'created_at' từ JSON
                             st.caption(f"🕒 {comment.get('created_at')}")
