@@ -5,10 +5,9 @@ import json
 # ============================
 # CONFIG SERVER
 # ============================
-SERVER_HOST = "172.31.245.233"
+SERVER_HOST = "172.18.215.152"
 SERVER_PORT = 8080
 
-# Cập nhật mapping dựa trên log thực tế của bạn
 STATUS_MAP = {
     "101": "Đăng nhập thành công",
     "102": "Đăng ký thành công",
@@ -35,23 +34,27 @@ def send_request(action, session="", data={}):
         "session": session,
         "data": data
     }, separators=(',', ':')) + "\r\n"
-    
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(5)
-            s.connect((SERVER_HOST, SERVER_PORT))
-            s.sendall(request.encode())
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(20)
+        s.connect((SERVER_HOST, SERVER_PORT))
+        s.sendall(request.encode('utf-8'))
+
+        buffer = b""
+        while True:
+            chunk = s.recv(4096)
+            print(chunk)
+            if not chunk:
+                break
+
+            buffer += chunk
             
-            buffer = ""
-            while True:
-                chunk = s.recv(4096).decode('utf-8')
-                if not chunk: break
-                buffer += chunk
-                if "\r\n" in buffer:
-                    resp_str = buffer.split("\r\n")[0]
-                    return json.loads(resp_str)
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
+            # Khi server đã gửi đủ JSON
+            if b"\r\n" in buffer:
+                resp_bytes = buffer.split(b"\r\n")[0]
+                print(json.loads(resp_bytes.decode("utf-8")))
+                return json.loads(resp_bytes.decode("utf-8"))
+            
     return {"status": "error", "message": "No response"}
 
 def show_message(res, success_code):
@@ -65,12 +68,12 @@ def show_message(res, success_code):
         return False
 
 # ============================
-# SESSION STATE (Quan trọng để không mất dữ liệu)
+# SESSION STATE 
 # ============================
 if "session" not in st.session_state: st.session_state.session = ""
 if "username" not in st.session_state: st.session_state.username = ""
 if "selected_project" not in st.session_state: st.session_state.selected_project = None
-if "projects_list" not in st.session_state: st.session_state.projects_list = [] # Lưu danh sách project tại đây
+if "projects_list" not in st.session_state: st.session_state.projects_list = [] 
 if "selected_task" not in st.session_state: st.session_state.selected_task = None
 if "tasks_list" not in st.session_state: st.session_state.tasks_list = []
 
@@ -153,9 +156,6 @@ with tab1:
             res = send_request("create_project", st.session_state.session, {"name": pname, "description": pdesc})
             show_message(res, "105")
 
-# ============================
-# TAB 2: QUẢN LÝ CÔNG VIỆC
-# ============================
 with tab2:
     if not st.session_state.selected_project:
         st.warning("⚠️ Vui lòng chọn dự án ở tab 'Dự án' trước!")
@@ -244,6 +244,68 @@ with tab2:
                     res = send_request("create_task", st.session_state.session, 
                                       {"project_id": prj['project_id'], "name": new_t_name, "description": new_t_desc})
                     show_message(res, "108")
+
+with tab3:
+    if not st.session_state.selected_project:
+        st.warning("⚠️ Vui lòng chọn dự án ở tab 'Dự án' trước!")
+    else:
+        prj = st.session_state.selected_project
+        st.subheader(f"👥 Thành viên dự án: {prj['project_name']}")
+
+        # --- PHẦN 1: HIỂN THỊ DANH SÁCH ---
+        col_refresh, col_add = st.columns([1, 1])
+        
+        if col_refresh.button("🔄 Làm mới danh sách"):
+            res = send_request("list_members", st.session_state.session, {"project_id": prj['project_id']})
+            if res.get("status") == "269": 
+                st.session_state.members_list = res.get("data", [])
+                st.toast("Đã cập nhật danh sách thành viên")
+            else:
+                show_message(res, "269")
+
+        # Hiển thị bảng thành viên
+        members = st.session_state.get("members_list", [])
+        if not members:
+            st.info("Chưa có dữ liệu thành viên. Nhấn 'Làm mới'.")
+        else:
+            # Tạo bảng hiển thị
+            for mem in members:
+                with st.container(border=True):
+                    c1, c2, c3 = st.columns([2, 2, 1])
+                    user_id = mem.get("user_id")
+                    username = mem.get("username")
+                    role = mem.get("role")
+                    
+                    c1.write(f"**{username}**")
+                    c2.caption(f"Quyền: `{role}`")
+                    
+                    # Nút đổi quyền (Ví dụ cập nhật role)
+                    with c3.popover("Sửa"):
+                        new_role = st.selectbox("Chọn quyền", ["PM", "MEMBER", "DEV"], key=f"role_{user_id}")
+                        if st.button("Lưu", key=f"save_{user_id}"):
+                            res = send_request("update_member", st.session_state.session, 
+                                             {"project_id": prj['project_id'], "user_id": user_id, "role": new_role})
+                            show_message(res, "112")
+
+        st.divider()
+
+        # --- PHẦN 2: THÊM THÀNH VIÊN MỚI ---
+        st.subheader("➕ Thêm thành viên")
+        with st.expander("Mở form thêm thành viên"):
+            with st.form("add_member_form"):
+                new_mem_user = st.text_input("Username người dùng")
+                new_mem_role = st.selectbox("Vai trò", ["MEMBER", "DEV", "PM"])
+                
+                if st.form_submit_button("Thêm vào dự án"):
+                    if new_mem_user:
+                        res = send_request("add_member", st.session_state.session, {
+                            "project_id": prj['project_id'],
+                            "username": new_mem_user,
+                            "role": new_mem_role
+                        })
+                        show_message(res, "106")
+                    else:
+                        st.error("Vui lòng nhập Username")
 
 # ============================
 # TAB 4: NHẬN XÉT (Sửa theo log 111)

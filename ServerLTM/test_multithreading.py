@@ -47,7 +47,7 @@ def simulate_user_workflow(user_idx):
         # 2. Tạo project với tên riêng biệt để tránh trùng lặp
         project_name = f"Thread_Project_{user_idx}_{int(time.time())}"
         result = create_project(session, project_name, "Multi-thread testing")
-        
+        print(result)
         duration = time.time() - start_time
         print(f"[Thread {user_idx}] Success: {project_name} - Time: {duration:.2f}s")
         return True
