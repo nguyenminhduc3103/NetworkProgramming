@@ -58,10 +58,12 @@ void *client_thread(void *arg) {
     int user_id = -1;
 
     while (1) {
-        int n = read_line_crlf(client, buf, sizeof(buf));
-        if (n <= 0) break;
+        char *line = read_line_crlf_dynamic(client);
+        if (!line) break;
 
-        cJSON *root = cJSON_Parse(buf);
+        cJSON *root = cJSON_Parse(line);
+        free(line);
+        
         if (!root) {
             send_json_response(client, S_LOGIN_ERR, "Invalid JSON", NULL);
             continue; 

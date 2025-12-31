@@ -30,29 +30,49 @@ void write_server_log(const char *fmt, ...) {
     fclose(f);
 }
 
-/* Read until CRLF (\r\n). Return length (excl CRLF) or -1 on error/close */
-int read_line_crlf(int client, char *buf, int max) {
-    int i = 0;
+/* Read until CRLF (\r\n). Return malloc'd buffer or NULL on error/close */
+char* read_line_crlf_dynamic(int client) {
+    int capacity = 256;
+    int len = 0;
+    char *buf = (char*)malloc(capacity);
+    if (!buf) return NULL;
+    
     char c;
-    while (i < max - 1) {
+    while (1) {
         ssize_t r = read(client, &c, 1);
-        if (r == 0) return -1;
-        if (r < 0) {
-            if (errno == EINTR) continue;
-            return -1;
+        if (r == 0 || r < 0) {
+            free(buf);
+            return NULL;
         }
+        
         if (c == '\r') {
             /* expect \n next */
             r = read(client, &c, 1);
-            if (r <= 0) return -1;
-            if (c != '\n') return -1;
-            buf[i] = '\0';
-            return i;
+            if (r <= 0) {
+                free(buf);
+                return NULL;
+            }
+            if (c != '\n') {
+                free(buf);
+                return NULL;
+            }
+            buf[len] = '\0';
+            return buf;
         }
-        buf[i++] = c;
+        
+        buf[len++] = c;
+        
+        /* Expand buffer if needed */
+        if (len >= capacity - 1) {
+            capacity *= 2;
+            char *new_buf = (char*)realloc(buf, capacity);
+            if (!new_buf) {
+                free(buf);
+                return NULL;
+            }
+            buf = new_buf;
+        }
     }
-    buf[i] = '\0';
-    return i;
 }
 
 /* Send JSON object with CRLF. dataobj may be NULL (empty {}). */
@@ -65,9 +85,17 @@ void send_json_response(int client, const char *status, const char *message, cJS
 
     char *out = cJSON_PrintUnformatted(root);
     if (out) {
-        char sendbuf[BUFFER_SIZE];
-        int n = snprintf(sendbuf, sizeof(sendbuf), "%s\r\n", out);
-        write(client, sendbuf, n);
+        int json_len = strlen(out);
+        /* Send JSON + CRLF */
+        char *sendbuf = (char*)malloc(json_len + 3);
+        if (sendbuf) {
+            memcpy(sendbuf, out, json_len);
+            sendbuf[json_len] = '\r';
+            sendbuf[json_len + 1] = '\n';
+            sendbuf[json_len + 2] = '\0';
+            write(client, sendbuf, json_len + 2);
+            free(sendbuf);
+        }
         free(out);
     }
     cJSON_Delete(root);
