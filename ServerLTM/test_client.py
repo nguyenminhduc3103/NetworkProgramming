@@ -1,7 +1,7 @@
 import socket
 import json
 
-HOST = "172.18.215.152"
+HOST = "172.31.245.233"
 PORT = 8080
 
 def send_request(req):
@@ -89,7 +89,7 @@ def list_members(session, project_id):
 
 if __name__ == "__main__":
     print("=== REGISTER ===")
-    #sprint(register("teonhe2", "123456"))
+    print(register("teonhe2", "123456"))
 
     print("=== LOGIN ===")
     resp = login("teonhe2", "123456")

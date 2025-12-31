@@ -205,12 +205,12 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
-    const char *role = "PM";
+    int role_val = ROLE_PM;  // Insert numeric role, not string
     MYSQL_BIND bind_pm[3];
     memset(bind_pm,0,sizeof(bind_pm));
     bind_pm[0].buffer_type = MYSQL_TYPE_LONG; bind_pm[0].buffer = &proj_id;
     bind_pm[1].buffer_type = MYSQL_TYPE_LONG; bind_pm[1].buffer = &user_id;
-    bind_pm[2].buffer_type = MYSQL_TYPE_STRING; bind_pm[2].buffer = (char*)role; bind_pm[2].buffer_length=strlen(role);
+    bind_pm[2].buffer_type = MYSQL_TYPE_LONG; bind_pm[2].buffer = &role_val;  // Changed to LONG
     mysql_stmt_bind_param(pm,bind_pm);
     if(mysql_stmt_execute(pm)!=0){
         mysql_stmt_close(pm);
