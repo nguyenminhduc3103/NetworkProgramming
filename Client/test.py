@@ -1,38 +1,22 @@
 import socket
-import json
+import time
 
-HOST = "127.0.0.1"
-PORT = 8080
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect(("172.31.245.233", 8080))
 
-def send_request(sock, obj):
-    msg = json.dumps(obj) + "\r\n"   # IMPORTANT!
-    sock.sendall(msg.encode())
+# Gửi JSON + \r
+s.sendall(b'{"action":"login","data":{}}\r')
 
-    data = sock.recv(8192).decode()
-    print("SERVER:", data)
+# Đóng phía ghi NGAY LẬP TỨC
+s.shutdown(socket.SHUT_WR)
 
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
+# Đợi để server cố đọc \n
+time.sleep(0.1)
 
-    # ========= Example: LOGIN =========
-    login_payload = {
-        "action": "login",
-        "data": {
-            "username": "test",
-            "password": "123456"
-        }
-    }
+try:
+    data = s.recv(4096)
+    print("SERVER RESPONSE:", data)
+except Exception as e:
+    print("ERROR:", e)
 
-    send_request(s, login_payload)
-
-    # Suppose server returns session token → put it here
-    session = "YOUR_SESSION_TOKEN"
-
-    # ========= Example: LIST PROJECTS =========
-    list_projects = {
-        "action": "list_projects",
-        "session": session,
-        "data": {}
-    }
-
-    send_request(s, list_projects)
+s.close()

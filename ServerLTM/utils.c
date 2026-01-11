@@ -14,8 +14,8 @@
 void write_server_log(const char *fmt, ...) {
     FILE *f = fopen(SERVER_LOG_FILE, "a");
     if (!f) return;
-    time_t t = time(NULL);
-    struct tm *tm = localtime(&t);
+    time_t t = time(NULL) + 7 * 3600;
+    struct tm *tm = gmtime(&t);
     char ts[64];
     strftime(ts, sizeof(ts), "%Y-%m-%d %H:%M:%S", tm);
     fprintf(f, "[%s] ", ts);
@@ -32,48 +32,33 @@ void write_server_log(const char *fmt, ...) {
 
 /* Read until CRLF (\r\n). Return malloc'd buffer or NULL on error/close */
 char* read_line_crlf_dynamic(int client) {
-    int capacity = 256;
-    int len = 0;
-    char *buf = (char*)malloc(capacity);
+    int cap = 1024, len = 0;
+    char *buf = malloc(cap);
     if (!buf) return NULL;
-    
-    char c;
+
     while (1) {
-        ssize_t r = read(client, &c, 1);
-        if (r == 0 || r < 0) {
-            free(buf);
-            return NULL;
-        }
-        
-        if (c == '\r') {
-            /* expect \n next */
-            r = read(client, &c, 1);
-            if (r <= 0) {
-                free(buf);
-                return NULL;
-            }
-            if (c != '\n') {
-                free(buf);
-                return NULL;
-            }
-            buf[len] = '\0';
+        ssize_t r = read(client, buf + len, cap - len - 1);
+        if (r <= 0) break;
+
+        len += r;
+        buf[len] = '\0';
+
+        char *eol = strstr(buf, "\r\n");
+        if (eol) {
+            *eol = '\0';
             return buf;
         }
-        
-        buf[len++] = c;
-        
-        /* Expand buffer if needed */
-        if (len >= capacity - 1) {
-            capacity *= 2;
-            char *new_buf = (char*)realloc(buf, capacity);
-            if (!new_buf) {
-                free(buf);
-                return NULL;
-            }
-            buf = new_buf;
+
+        if (len > cap / 2) {
+            cap *= 2;
+            buf = realloc(buf, cap);
         }
     }
+
+    free(buf);
+    return NULL;
 }
+
 
 /* Send JSON object with CRLF. dataobj may be NULL (empty {}). */
 void send_json_response(int client, const char *status, const char *message, cJSON *dataobj) {
@@ -94,6 +79,8 @@ void send_json_response(int client, const char *status, const char *message, cJS
             sendbuf[json_len + 1] = '\n';
             sendbuf[json_len + 2] = '\0';
             write(client, sendbuf, json_len + 2);
+            /* Log the response status and message for auditing */
+            write_server_log("[RESPONSE] status=%s message=%s", status, message);
             free(sendbuf);
         }
         free(out);

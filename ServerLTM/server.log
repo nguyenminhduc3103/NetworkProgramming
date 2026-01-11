@@ -1,586 +1,990 @@
-[2025-12-31 11:38:04] Server start on port 8080
-[2025-12-31 11:41:07] [login] user 1 logged in (teonhe2)
-[2025-12-31 11:43:32] [register] username exists: teonhe2
-[2025-12-31 11:43:36] [login] user 1 logged in (teonhe2)
-[2025-12-31 11:44:57] [register] username exists: teonhe2
-[2025-12-31 11:45:00] [login] user 1 logged in (teonhe2)
-[2025-12-31 11:46:13] [login] user 1 logged in (teonhe2)
-[2025-12-31 11:46:56] Server start on port 8080
-[2025-12-31 11:47:11] [login] user 3 logged in (teonhe2)
-[2025-12-31 11:48:11] Server start on port 8080
-[2025-12-31 11:48:24] [login] user 3 logged in (teonhe2)
-[2025-12-31 11:49:11] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:06:23] [register] username exists: teonhe2
-[2025-12-31 12:06:29] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:07:38] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:08:28] Server start on port 8080
-[2025-12-31 12:08:40] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:09:26] Server start on port 8080
-[2025-12-31 12:09:35] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:11:26] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:29:45] Server start on port 8080
-[2025-12-31 12:30:35] Server start on port 8080
-[2025-12-31 12:30:50] [DISPATCH] action=login
-[2025-12-31 12:30:52] [login] user 1 logged in (teonhe2)
-[2025-12-31 12:30:57] [DISPATCH] action=list_projects user_id=1
-[2025-12-31 12:31:18] [DISPATCH] action=list_tasks user_id=1
-[2025-12-31 12:31:31] [DISPATCH] action=assign_task user_id=1
-[2025-12-31 12:34:48] [DISPATCH] action=update_task user_id=1
-[2025-12-31 12:38:55] Server start on port 8080
-[2025-12-31 12:39:15] [DISPATCH] action=login
-[2025-12-31 12:39:15] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:39:42] [DISPATCH] action=list_projects user_id=3
-[2025-12-31 12:40:02] [DISPATCH] action=list_tasks user_id=3
-[2025-12-31 12:40:20] [DISPATCH] action=update_task user_id=3
-[2025-12-31 12:41:04] [DISPATCH] action=list_tasks user_id=3
-[2025-12-31 12:41:57] [DISPATCH] action=comment_task user_id=3
-[2025-12-31 12:42:03] [DISPATCH] action=comment_task user_id=3
-[2025-12-31 12:42:20] [DISPATCH] action=assign_task user_id=3
-[2025-12-31 12:43:11] [DISPATCH] action=list_members user_id=3
-[2025-12-31 12:52:41] Server start on port 8080
-[2025-12-31 12:53:22] Client connected: ip=172.31.240.1:57398
-[2025-12-31 12:53:32] [DISPATCH] action=login ip=:57398 username=teonhe2
-[2025-12-31 12:53:32] [login] user 3 logged in (teonhe2)
-[2025-12-31 12:53:37] Client connected: ip=172.31.240.1:57174
-[2025-12-31 12:53:45] [DISPATCH] action=list_projects ip=:57174 user_id=3 username=teonhe2
-[2025-12-31 12:57:22] Server start on port 8080
-[2025-12-31 12:58:55] Client connected
-[2025-12-31 12:59:04] [DISPATCH] action=login username=admin
-[2025-12-31 12:59:04] [login] FAILED - invalid_credentials username=admin reason=user_not_found_or_wrong_password
-[2025-12-31 13:00:09] Client connected
-[2025-12-31 13:00:19] [DISPATCH] action=login username=teonhe2
-[2025-12-31 13:00:19] Client connected
-[2025-12-31 13:00:19] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
-[2025-12-31 13:00:26] [DISPATCH] action=get_task_detail user_id=3 task_id=8
-[2025-12-31 13:01:51] Server start on port 8080
-[2025-12-31 13:01:55] Client connected
-[2025-12-31 13:02:05] [DISPATCH] action=login username=teonhe2
-[2025-12-31 13:02:05] Client connected
-[2025-12-31 13:02:05] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
-[2025-12-31 13:02:10] [DISPATCH] action=get_task_detail user_id=3 task_id=8
-[2025-12-31 13:03:24] Server start on port 8080
-[2025-12-31 13:03:27] Client connected
-[2025-12-31 13:03:37] [DISPATCH] action=login username=teonhe2
-[2025-12-31 13:03:37] Client connected
-[2025-12-31 13:03:37] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
-[2025-12-31 13:03:42] [DISPATCH] action=list_projects user_id=3 username=teonhe2
-[2025-12-31 13:03:42] Client connected
-[2025-12-31 13:03:49] [DISPATCH] action=create_project user_id=3 project_name=unknown
-[2025-12-31 13:03:49] Client connected
-[2025-12-31 13:03:59] [DISPATCH] action=add_member user_id=3 new_member=teonhe1 role=MEMBER
-[2025-12-31 13:03:59] Client connected
-[2025-12-31 13:04:06] [DISPATCH] action=list_members user_id=3 project_id=3
-[2025-12-31 13:04:06] Client connected
-[2025-12-31 13:04:13] [DISPATCH] action=list_tasks user_id=3 project_id=3
-[2025-12-31 13:04:13] Client connected
-[2025-12-31 13:04:21] [DISPATCH] action=create_task user_id=3 project_id=3 task_name=TestTask
-[2025-12-31 13:04:21] [create_task] user_id=3 project_id=3 task_id=42 task_name=TestTask
-[2025-12-31 13:04:21] Client connected
-[2025-12-31 13:04:28] [DISPATCH] action=assign_task user_id=3 task_id=42 assigned_to_user=2
-[2025-12-31 13:04:28] Client connected
-[2025-12-31 13:04:34] [DISPATCH] action=update_task user_id=3 task_id=42 new_status=in_progress
-[2025-12-31 13:04:34] Client connected
-[2025-12-31 13:04:44] [DISPATCH] action=comment_task user_id=3 task_id=42
-[2025-12-31 13:04:44] Client connected
-[2025-12-31 13:04:49] [DISPATCH] action=update_task user_id=3 task_id=42 new_status=done
-[2025-12-31 13:06:52] Client connected
-[2025-12-31 13:07:01] [DISPATCH] action=login username=teonhe2
-[2025-12-31 13:07:01] Client connected
-[2025-12-31 13:07:01] [login] SUCCESS user_id=3 username=teonhe2 session_created=true
-[2025-12-31 13:07:07] [DISPATCH] action=list_projects user_id=3 username=teonhe2
-[2025-12-31 13:07:07] Client connected
-[2025-12-31 13:07:14] [DISPATCH] action=create_project user_id=3 project_name=unknown
-[2025-12-31 13:07:14] Client connected
-[2025-12-31 13:07:22] [DISPATCH] action=add_member user_id=3 new_member=teonhe1 role=MEMBER
-[2025-12-31 13:07:22] Client connected
-[2025-12-31 13:07:29] [DISPATCH] action=list_members user_id=3 project_id=3
-[2025-12-31 13:07:29] Client connected
-[2025-12-31 13:07:36] [DISPATCH] action=list_tasks user_id=3 project_id=3
-[2025-12-31 13:07:36] Client connected
-[2025-12-31 13:07:46] [DISPATCH] action=create_task user_id=3 project_id=3 task_name=TestTask
-[2025-12-31 13:07:46] [create_task] user_id=3 project_id=3 task_id=43 task_name=TestTask
-[2025-12-31 13:07:46] Client connected
-[2025-12-31 13:07:52] [DISPATCH] action=assign_task user_id=3 task_id=43 assigned_to_user=2
-[2025-12-31 13:07:52] Client connected
-[2025-12-31 13:07:57] [DISPATCH] action=update_task user_id=3 task_id=43 new_status=in_progress
-[2025-12-31 13:07:57] Client connected
-[2025-12-31 13:08:07] [DISPATCH] action=comment_task user_id=3 task_id=43
-[2025-12-31 13:08:07] Client connected
-[2025-12-31 13:08:14] [DISPATCH] action=update_task user_id=3 task_id=43 new_status=done
-[2025-12-31 13:08:14] Client connected
-[2025-12-31 13:08:21] [DISPATCH] action=get_task_detail user_id=3 task_id=43
-[2025-12-31 15:25:10] Server start on port 8080
-[2025-12-31 15:25:45] Client connected from 172.31.240.1:64828
-[2025-12-31 15:25:45] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:26:05] Client connected from 172.31.240.1:57013
-[2025-12-31 15:26:05] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:26:14] Client connected from 172.31.240.1:58846
-[2025-12-31 15:26:14] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:26:15] Client connected from 172.31.240.1:58847
-[2025-12-31 15:26:15] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:26:23] Client connected from 172.31.240.1:58848
-[2025-12-31 15:26:23] Client connected from 172.31.240.1:58849
-[2025-12-31 15:26:23] [list_tasks] Action: User: project_id=2 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:26:23] Client connected from 172.31.240.1:58850
-[2025-12-31 15:26:23] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:27:03] Client connected from 172.31.240.1:63435
-[2025-12-31 15:27:03] [create_project] Action: User: status=FAILED user_id=2 response=135
-[2025-12-31 15:27:11] Client connected from 172.31.240.1:60300
-[2025-12-31 15:27:11] [create_project] Action: User: status=FAILED user_id=2 response=135
-[2025-12-31 15:27:22] Client connected from 172.31.240.1:53396
-[2025-12-31 15:27:22] [create_project] Action: User: status=FAILED user_id=2 response=135
-[2025-12-31 15:28:53] Client connected from 172.31.240.1:62442
-[2025-12-31 15:28:53] Client connected from 172.31.240.1:62443
-[2025-12-31 15:28:53] [list_tasks] Action: User: project_id=3 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:28:53] Client connected from 172.31.240.1:62444
-[2025-12-31 15:28:53] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:29:24] Client connected from 172.31.240.1:61794
-[2025-12-31 15:29:27] Client connected from 172.31.240.1:61795
-[2025-12-31 15:29:32] Client connected from 172.31.240.1:54016
-[2025-12-31 15:29:34] Client connected from 172.31.240.1:54017
-[2025-12-31 15:30:36] Client connected from 172.31.240.1:50369
-[2025-12-31 15:30:36] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:30:45] Client connected from 172.31.240.1:50758
-[2025-12-31 15:30:45] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:30:48] Client connected from 172.31.240.1:50759
-[2025-12-31 15:30:48] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:30:50] Client connected from 172.31.240.1:50760
-[2025-12-31 15:30:50] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:31:05] Client connected from 172.31.240.1:52534
-[2025-12-31 15:31:05] [create_project] Action: User: status=SUCCESS user_id=2 project_id=120 response=105
-[2025-12-31 15:31:05] Client connected from 172.31.240.1:52535
-[2025-12-31 15:31:05] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:31:08] Client connected from 172.31.240.1:65387
-[2025-12-31 15:31:08] Client connected from 172.31.240.1:65388
-[2025-12-31 15:31:08] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:31:08] Client connected from 172.31.240.1:65389
-[2025-12-31 15:31:08] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:31:41] Client connected from 172.31.240.1:52806
-[2025-12-31 15:31:42] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:31:44] Client connected from 172.31.240.1:52807
-[2025-12-31 15:31:44] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:31:44] Client connected from 172.31.240.1:63325
-[2025-12-31 15:31:44] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:31:50] Client connected from 172.31.240.1:63326
-[2025-12-31 15:31:50] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:35:51] Client connected from 172.31.240.1:62177
-[2025-12-31 15:35:51] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:35:51] Client connected from 172.31.240.1:62178
-[2025-12-31 15:35:51] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:35:52] Client connected from 172.31.240.1:62179
-[2025-12-31 15:35:52] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:35:52] Client connected from 172.31.240.1:62180
-[2025-12-31 15:35:52] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:35:52] Client connected from 172.31.240.1:62181
-[2025-12-31 15:35:52] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52455
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52456
-[2025-12-31 15:36:15] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:36:15] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52457
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52458
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52459
-[2025-12-31 15:36:15] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52460
-[2025-12-31 15:36:15] [list_tasks] Action: User: project_id=3 status=SUCCESS user_id=3 response=107
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52461
-[2025-12-31 15:36:15] [create_task] Action: User: task_id=44 status=SUCCESS user_id=3 response=108
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52462
-[2025-12-31 15:36:15] [assign_task] Action: User: status=FAILED user_id=3 response=139
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52463
-[2025-12-31 15:36:15] [update_task] Action: User: task_id=44 status=SUCCESS user_id=3 response=110
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52464
-[2025-12-31 15:36:15] [comment_task] Action: User: task_id=44 status=SUCCESS user_id=3 response=111
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52465
-[2025-12-31 15:36:15] [update_task] Action: User: task_id=44 status=SUCCESS user_id=3 response=110
-[2025-12-31 15:36:15] Client connected from 172.31.240.1:52466
-[2025-12-31 15:36:16] [get_task_detail] Action: User: task_id=44 status=SUCCESS user_id=3 response=112
-[2025-12-31 15:39:30] Server start on port 8080
-[2025-12-31 15:40:03] Client connected from 172.31.240.1:57459
-[2025-12-31 15:40:03] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:40:09] Client connected from 172.31.240.1:57460
-[2025-12-31 15:40:09] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:40:13] Client connected from 172.31.240.1:49176
-[2025-12-31 15:40:13] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:40:14] Client connected from 172.31.240.1:49177
-[2025-12-31 15:40:14] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:40:18] Client connected from 172.31.240.1:49178
-[2025-12-31 15:40:18] Client connected from 172.31.240.1:49179
-[2025-12-31 15:40:18] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:40:18] Client connected from 172.31.240.1:49180
-[2025-12-31 15:40:18] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:40:21] Client connected from 172.31.240.1:50863
-[2025-12-31 15:40:21] Client connected from 172.31.240.1:50864
-[2025-12-31 15:40:21] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:40:21] Client connected from 172.31.240.1:50865
-[2025-12-31 15:40:21] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:42:45] Client connected from 172.31.240.1:55529
-[2025-12-31 15:42:45] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:42:56] Client connected from 172.31.240.1:62092
-[2025-12-31 15:42:56] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:42:58] Client connected from 172.31.240.1:62093
-[2025-12-31 15:42:58] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:43:00] Client connected from 172.31.240.1:62094
-[2025-12-31 15:43:00] Client connected from 172.31.240.1:62095
-[2025-12-31 15:43:00] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:43:00] Client connected from 172.31.240.1:62096
-[2025-12-31 15:43:00] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:43:05] Client connected from 172.31.240.1:52999
-[2025-12-31 15:43:05] Client connected from 172.31.240.1:53000
-[2025-12-31 15:43:05] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:43:05] Client connected from 172.31.240.1:53001
-[2025-12-31 15:43:05] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:44:33] Client connected from 172.31.240.1:50183
-[2025-12-31 15:44:33] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:44:34] Client connected from 172.31.240.1:61989
-[2025-12-31 15:44:34] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:44:35] Client connected from 172.31.240.1:57830
-[2025-12-31 15:44:35] Client connected from 172.31.240.1:57831
-[2025-12-31 15:44:35] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:44:35] Client connected from 172.31.240.1:57832
-[2025-12-31 15:44:35] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:45:54] Client connected from 172.31.240.1:52874
-[2025-12-31 15:45:54] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:45:55] Client connected from 172.31.240.1:58669
-[2025-12-31 15:45:55] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:45:55] Client connected from 172.31.240.1:58673
-[2025-12-31 15:45:55] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:47:53] Client connected from 172.31.240.1:62671
-[2025-12-31 15:47:53] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:47:54] Client connected from 172.31.240.1:52253
-[2025-12-31 15:47:54] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:47:56] Client connected from 172.31.240.1:58158
-[2025-12-31 15:47:56] Client connected from 172.31.240.1:58159
-[2025-12-31 15:47:56] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:47:56] Client connected from 172.31.240.1:58160
-[2025-12-31 15:47:56] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:48:05] Client connected from 172.31.240.1:50717
-[2025-12-31 15:48:05] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:48:06] Client connected from 172.31.240.1:50718
-[2025-12-31 15:48:06] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:49:49] Client connected from 172.31.240.1:55439
-[2025-12-31 15:49:49] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:49:51] Client connected from 172.31.240.1:50061
-[2025-12-31 15:49:51] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:49:52] Client connected from 172.31.240.1:50062
-[2025-12-31 15:49:52] Client connected from 172.31.240.1:50063
-[2025-12-31 15:49:52] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:49:52] Client connected from 172.31.240.1:50064
-[2025-12-31 15:49:52] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:50:04] Client connected from 172.31.240.1:50066
-[2025-12-31 15:50:04] [create_task] Action: User: task_id=45 status=SUCCESS user_id=2 response=108
-[2025-12-31 15:50:04] Client connected from 172.31.240.1:50067
-[2025-12-31 15:50:04] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:51:16] Client connected from 172.31.240.1:62940
-[2025-12-31 15:51:16] [assign_task] Action: User: task_id=45 status=FAILED user_id=2 response=149
-[2025-12-31 15:52:02] Client connected from 172.31.240.1:64941
-[2025-12-31 15:52:02] [assign_task] Action: User: task_id=45 status=FAILED user_id=2 response=149
-[2025-12-31 15:52:23] Client connected from 172.31.240.1:64657
-[2025-12-31 15:52:23] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:52:25] Client connected from 172.31.240.1:57589
-[2025-12-31 15:52:25] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:52:26] Client connected from 172.31.240.1:57590
-[2025-12-31 15:52:26] Client connected from 172.31.240.1:57592
-[2025-12-31 15:52:26] [list_tasks] Action: User: project_id=4 status=SUCCESS user_id=3 response=107
-[2025-12-31 15:52:26] Client connected from 172.31.240.1:57593
-[2025-12-31 15:52:26] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 15:52:42] Client connected from 172.31.240.1:64648
-[2025-12-31 15:52:42] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 15:52:44] Client connected from 172.31.240.1:54799
-[2025-12-31 15:52:44] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 15:52:46] Client connected from 172.31.240.1:56228
-[2025-12-31 15:52:46] Client connected from 172.31.240.1:56229
-[2025-12-31 15:52:46] [list_tasks] Action: User: project_id=3 status=SUCCESS user_id=3 response=107
-[2025-12-31 15:52:46] Client connected from 172.31.240.1:56230
-[2025-12-31 15:52:46] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 15:54:28] Client connected from 172.31.240.1:63917
-[2025-12-31 15:54:28] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:54:31] Client connected from 172.31.240.1:51411
-[2025-12-31 15:54:31] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:54:31] Client connected from 172.31.240.1:51412
-[2025-12-31 15:54:31] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:54:32] Client connected from 172.31.240.1:51413
-[2025-12-31 15:54:32] Client connected from 172.31.240.1:51414
-[2025-12-31 15:54:33] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:54:33] Client connected from 172.31.240.1:51415
-[2025-12-31 15:54:33] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:54:51] Client connected from 172.31.240.1:55165
-[2025-12-31 15:54:51] [assign_task] Action: User: task_id=45 status=FAILED user_id=2 response=149
-[2025-12-31 15:57:19] Client connected from 172.31.240.1:57379
-[2025-12-31 15:57:19] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 15:57:20] Client connected from 172.31.240.1:61801
-[2025-12-31 15:57:20] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 15:57:22] Client connected from 172.31.240.1:64316
-[2025-12-31 15:57:22] Client connected from 172.31.240.1:64317
-[2025-12-31 15:57:22] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 15:57:22] Client connected from 172.31.240.1:64318
-[2025-12-31 15:57:22] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:57:32] Client connected from 172.31.240.1:64320
-[2025-12-31 15:59:38] Server start on port 8080
-[2025-12-31 15:59:47] Client connected from 172.31.240.1:55467
-[2025-12-31 15:59:47] [add_member] Action: User: status=SUCCESS user_id=2 response=106
-[2025-12-31 15:59:47] Client connected from 172.31.240.1:55468
-[2025-12-31 15:59:47] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 15:59:55] Client connected from 172.31.240.1:52082
-[2025-12-31 16:00:02] Client connected from 172.31.240.1:52083
-[2025-12-31 16:00:02] [assign_task] Action: User: task_id=45 status=SUCCESS user_id=2 response=109
-[2025-12-31 16:00:02] Client connected from 172.31.240.1:52084
-[2025-12-31 16:00:02] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:00:09] Client connected from 172.31.240.1:52086
-[2025-12-31 16:00:29] Client connected from 172.31.240.1:56792
-[2025-12-31 16:00:29] [comment_task] Action: User: task_id=45 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:01:42] Client connected from 172.31.240.1:53054
-[2025-12-31 16:01:43] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:01:43] Client connected from 172.31.240.1:65000
-[2025-12-31 16:01:44] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 16:01:47] Client connected from 172.31.240.1:60830
-[2025-12-31 16:01:47] Client connected from 172.31.240.1:60831
-[2025-12-31 16:01:47] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:01:47] Client connected from 172.31.240.1:60832
-[2025-12-31 16:01:47] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:03:31] Server start on port 8080
-[2025-12-31 16:03:47] Client connected from 172.31.240.1:60412
-[2025-12-31 16:03:47] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:03:48] Client connected from 172.31.240.1:54483
-[2025-12-31 16:03:48] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 16:03:51] Client connected from 172.31.240.1:62133
-[2025-12-31 16:03:51] Client connected from 172.31.240.1:62134
-[2025-12-31 16:03:51] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:03:51] Client connected from 172.31.240.1:62135
-[2025-12-31 16:03:51] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:04:16] Client connected from 172.31.240.1:64111
-[2025-12-31 16:04:51] Client connected from 172.31.240.1:50409
-[2025-12-31 16:04:51] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 16:04:53] Client connected from 172.31.240.1:61665
-[2025-12-31 16:04:54] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 16:05:01] Client connected from 172.31.240.1:62781
-[2025-12-31 16:05:01] [search_project] Action: User: status=SUCCESS user_id=2 response=104
-[2025-12-31 16:05:03] Client connected from 172.31.240.1:62782
-[2025-12-31 16:05:03] Client connected from 172.31.240.1:62783
-[2025-12-31 16:05:03] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:05:03] Client connected from 172.31.240.1:62784
-[2025-12-31 16:05:03] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:05:23] Client connected from 172.31.240.1:61891
-[2025-12-31 16:05:23] [create_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=108
-[2025-12-31 16:05:24] Client connected from 172.31.240.1:61892
-[2025-12-31 16:05:24] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:06:45] Server start on port 8080
-[2025-12-31 16:06:51] Server start on port 8080
-[2025-12-31 16:06:58] Client connected from 172.31.240.1:62152
-[2025-12-31 16:06:58] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 16:07:00] Client connected from 172.31.240.1:62349
-[2025-12-31 16:07:00] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 16:07:01] Client connected from 172.31.240.1:54703
-[2025-12-31 16:07:01] Client connected from 172.31.240.1:54704
-[2025-12-31 16:07:01] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:07:01] Client connected from 172.31.240.1:54705
-[2025-12-31 16:07:01] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:07:15] Client connected from 172.31.240.1:55623
-[2025-12-31 16:07:15] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:07:33] Client connected from 172.31.240.1:54107
-[2025-12-31 16:07:33] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:07:34] Client connected from 172.31.240.1:54109
-[2025-12-31 16:07:34] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:07:34] Client connected from 172.31.240.1:54110
-[2025-12-31 16:07:34] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:07:34] Client connected from 172.31.240.1:54111
-[2025-12-31 16:07:34] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:07:34] Client connected from 172.31.240.1:54112
-[2025-12-31 16:07:34] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:08:48] Server start on port 8080
-[2025-12-31 16:08:56] Client connected from 172.31.240.1:58236
-[2025-12-31 16:08:56] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 16:08:57] Client connected from 172.31.240.1:52394
-[2025-12-31 16:08:57] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 16:08:59] Client connected from 172.31.240.1:57958
-[2025-12-31 16:08:59] Client connected from 172.31.240.1:57959
-[2025-12-31 16:08:59] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:08:59] Client connected from 172.31.240.1:57960
-[2025-12-31 16:08:59] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:09:03] Client connected from 172.31.240.1:57962
-[2025-12-31 16:09:03] Client connected from 172.31.240.1:57963
-[2025-12-31 16:09:03] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:09:03] Client connected from 172.31.240.1:57964
-[2025-12-31 16:09:03] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:09:08] Client connected from 172.31.240.1:57965
-[2025-12-31 16:09:08] [create_task] Action: User: status=FAILED user_id=2 response=508 mysql=Cannot add or update a child row: a foreign key constraint fails (`project_management`.`tasks`, CONSTRAINT `tasks_ibfk_2` FOREIGN KEY (`assigned_to`) REFERENCES `users` (`user_id`) ON DELETE SET NULL)
-[2025-12-31 16:14:57] Server start on port 8080
-[2025-12-31 16:15:01] Client connected from 172.31.240.1:58667
-[2025-12-31 16:15:01] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:15:02] Client connected from 172.31.240.1:54741
-[2025-12-31 16:15:02] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:15:12] Client connected from 172.31.240.1:55474
-[2025-12-31 16:15:12] [create_task] Action: User: status=FAILED user_id=2 response=508
-[2025-12-31 16:20:08] Server start on port 8080
-[2025-12-31 16:20:11] Client connected from 172.31.240.1:54684
-[2025-12-31 16:20:11] [create_task] Action: User: task_id=57 status=SUCCESS user_id=2 response=108
-[2025-12-31 16:20:11] Client connected from 172.31.240.1:54685
-[2025-12-31 16:20:11] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:21:47] Client connected from 172.31.240.1:54382
-[2025-12-31 16:21:47] [add_member] Action: User: status=SUCCESS user_id=2 response=106
-[2025-12-31 16:21:47] Client connected from 172.31.240.1:54383
-[2025-12-31 16:21:47] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:21:52] Client connected from 172.31.240.1:53388
-[2025-12-31 16:21:52] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:22:05] Client connected from 172.31.240.1:55688
-[2025-12-31 16:22:05] [create_task] Action: User: task_id=58 status=SUCCESS user_id=2 response=108
-[2025-12-31 16:22:05] Client connected from 172.31.240.1:55689
-[2025-12-31 16:22:05] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:22:15] Client connected from 172.31.240.1:58677
-[2025-12-31 16:22:15] [assign_task] Action: User: task_id=58 status=SUCCESS user_id=2 response=109
-[2025-12-31 16:22:15] Client connected from 172.31.240.1:58678
-[2025-12-31 16:22:15] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:30:45] Server start on port 8080
-[2025-12-31 16:30:55] Client connected from 172.31.240.1:55643
-[2025-12-31 16:30:55] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 16:30:56] Client connected from 172.31.240.1:63845
-[2025-12-31 16:30:56] [list_projects] Action: User: status=SUCCESS user_id=2 response=103
-[2025-12-31 16:30:58] Client connected from 172.31.240.1:49800
-[2025-12-31 16:30:58] Client connected from 172.31.240.1:49801
-[2025-12-31 16:30:58] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:30:58] Client connected from 172.31.240.1:49802
-[2025-12-31 16:30:58] [list_members] Action: User: status=SUCCESS user_id=2 response=269
-[2025-12-31 16:31:13] Client connected from 172.31.240.1:60744
-[2025-12-31 16:31:13] [assign_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=109
-[2025-12-31 16:31:13] Client connected from 172.31.240.1:60745
-[2025-12-31 16:31:13] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:31:31] Client connected from 172.31.240.1:57300
-[2025-12-31 16:31:31] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:32:47] Client connected from 172.31.240.1:51375
-[2025-12-31 16:32:47] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:32:48] Client connected from 172.31.240.1:51376
-[2025-12-31 16:32:48] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:32:49] Client connected from 172.31.240.1:51377
-[2025-12-31 16:32:49] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:32:49] Client connected from 172.31.240.1:51378
-[2025-12-31 16:32:49] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=2 response=111
-[2025-12-31 16:33:23] Client connected from 172.31.240.1:55143
-[2025-12-31 16:33:23] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:33:25] Client connected from 172.31.240.1:65014
-[2025-12-31 16:33:25] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 16:33:28] Client connected from 172.31.240.1:58046
-[2025-12-31 16:33:29] Client connected from 172.31.240.1:58047
-[2025-12-31 16:33:29] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:33:29] Client connected from 172.31.240.1:58048
-[2025-12-31 16:33:29] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:33:42] Client connected from 172.31.240.1:50106
-[2025-12-31 16:33:42] [assign_task] Action: User: task_id=57 status=FAILED user_id=3 response=149
-[2025-12-31 16:33:52] Client connected from 172.31.240.1:62135
-[2025-12-31 16:33:52] [update_task] Action: User: task_id=45 status=SUCCESS user_id=3 response=110
-[2025-12-31 16:33:52] Client connected from 172.31.240.1:62136
-[2025-12-31 16:33:52] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:34:05] Client connected from 172.31.240.1:58050
-[2025-12-31 16:34:05] [update_task] Action: User: task_id=58 status=FAILED user_id=3 response=150
-[2025-12-31 16:35:01] Client connected from 172.31.240.1:62715
-[2025-12-31 16:35:01] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:35:02] Client connected from 172.31.240.1:55515
-[2025-12-31 16:35:02] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 16:35:07] Client connected from 172.31.240.1:55516
-[2025-12-31 16:35:07] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:35:08] Client connected from 172.31.240.1:55517
-[2025-12-31 16:35:08] Client connected from 172.31.240.1:55518
-[2025-12-31 16:35:08] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:35:08] Client connected from 172.31.240.1:55519
-[2025-12-31 16:35:08] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:35:23] Client connected from 172.31.240.1:60459
-[2025-12-31 16:35:23] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=3 response=111
-[2025-12-31 16:35:28] Client connected from 172.31.240.1:56572
-[2025-12-31 16:35:28] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=3 response=111
-[2025-12-31 16:38:02] Client connected from 172.31.240.1:60131
-[2025-12-31 16:38:02] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:38:05] Client connected from 172.31.240.1:57297
-[2025-12-31 16:38:05] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:38:06] Client connected from 172.31.240.1:57298
-[2025-12-31 16:38:06] Client connected from 172.31.240.1:57299
-[2025-12-31 16:38:06] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:38:06] Client connected from 172.31.240.1:57300
-[2025-12-31 16:38:06] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:38:41] Client connected from 172.31.240.1:52522
-[2025-12-31 16:38:41] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=3 response=111
-[2025-12-31 16:38:57] Client connected from 172.31.240.1:49735
-[2025-12-31 16:38:58] [comment_task] Action: User: task_id=46 status=SUCCESS user_id=3 response=111
-[2025-12-31 16:41:17] Client connected from 172.31.240.1:54890
-[2025-12-31 16:41:17] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:41:19] Client connected from 172.31.240.1:53310
-[2025-12-31 16:41:19] [list_projects] Action: User: status=SUCCESS user_id=3 response=103
-[2025-12-31 16:41:22] Client connected from 172.31.240.1:53311
-[2025-12-31 16:41:22] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:41:23] Client connected from 172.31.240.1:53312
-[2025-12-31 16:41:23] Client connected from 172.31.240.1:53313
-[2025-12-31 16:41:23] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:41:23] Client connected from 172.31.240.1:53314
-[2025-12-31 16:41:23] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:41:28] Client connected from 172.31.240.1:53315
-[2025-12-31 16:41:28] [get_task_detail] Action: User: task_id=46 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:41:39] Server start on port 8080
-[2025-12-31 16:41:45] Client connected from 172.31.240.1:55831
-[2025-12-31 16:41:45] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:41:48] Client connected from 172.31.240.1:55859
-[2025-12-31 16:41:48] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:41:49] Client connected from 172.31.240.1:55860
-[2025-12-31 16:41:49] Client connected from 172.31.240.1:55861
-[2025-12-31 16:41:49] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:41:49] Client connected from 172.31.240.1:55862
-[2025-12-31 16:41:49] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:41:55] Client connected from 172.31.240.1:55865
-[2025-12-31 16:41:55] [get_task_detail] Action: User: task_id=46 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:42:54] Server start on port 8080
-[2025-12-31 16:42:58] Client connected from 172.31.240.1:51993
-[2025-12-31 16:42:58] [get_task_detail] Action: User: task_id=46 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:43:55] Server start on port 8080
-[2025-12-31 16:44:11] Client connected from 172.31.240.1:55574
-[2025-12-31 16:44:11] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:44:14] Client connected from 172.31.240.1:49689
-[2025-12-31 16:44:14] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:44:15] Client connected from 172.31.240.1:49691
-[2025-12-31 16:44:15] Client connected from 172.31.240.1:49692
-[2025-12-31 16:44:16] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:44:16] Client connected from 172.31.240.1:49693
-[2025-12-31 16:44:16] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:44:19] Client connected from 172.31.240.1:50813
-[2025-12-31 16:44:19] [get_task_detail] Action: User: task_id=46 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:45:30] Server start on port 8080
-[2025-12-31 16:45:34] Client connected from 172.31.240.1:50806
-[2025-12-31 16:45:34] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:45:37] Client connected from 172.31.240.1:57910
-[2025-12-31 16:45:37] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:45:38] Client connected from 172.31.240.1:57911
-[2025-12-31 16:45:38] Client connected from 172.31.240.1:57912
-[2025-12-31 16:45:38] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:45:38] Client connected from 172.31.240.1:57913
-[2025-12-31 16:45:38] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:45:42] Client connected from 172.31.240.1:57914
-[2025-12-31 16:45:42] [get_task_detail] Action: User: task_id=45 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:46:15] Server start on port 8080
-[2025-12-31 16:46:23] Client connected from 172.31.240.1:54578
-[2025-12-31 16:46:23] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:46:26] Client connected from 172.31.240.1:54579
-[2025-12-31 16:46:26] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:46:27] Client connected from 172.31.240.1:54580
-[2025-12-31 16:46:27] Client connected from 172.31.240.1:54581
-[2025-12-31 16:46:27] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:46:27] Client connected from 172.31.240.1:54582
-[2025-12-31 16:46:27] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:46:35] Client connected from 172.31.240.1:53807
-[2025-12-31 16:46:35] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:46:37] Client connected from 172.31.240.1:63557
-[2025-12-31 16:46:37] [get_task_detail] Action: User: task_id=46 status=SUCCESS user_id=3 response=112
-[2025-12-31 16:46:56] Server start on port 8080
-[2025-12-31 16:47:00] Client connected from 172.31.240.1:64300
-[2025-12-31 16:47:00] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
-[2025-12-31 16:47:02] Client connected from 172.31.240.1:50159
-[2025-12-31 16:47:02] [search_project] Action: User: status=SUCCESS user_id=3 response=104
-[2025-12-31 16:47:04] Client connected from 172.31.240.1:50160
-[2025-12-31 16:47:04] Client connected from 172.31.240.1:50161
-[2025-12-31 16:47:04] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=3 response=107
-[2025-12-31 16:47:04] Client connected from 172.31.240.1:50162
-[2025-12-31 16:47:04] [list_members] Action: User: status=SUCCESS user_id=3 response=269
-[2025-12-31 16:47:41] Client connected from 172.31.240.1:56809
-[2025-12-31 16:47:41] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
-[2025-12-31 16:47:45] Client connected from 172.31.240.1:49711
-[2025-12-31 16:47:45] [search_project] Action: User: status=SUCCESS user_id=2 response=104
-[2025-12-31 16:47:46] Client connected from 172.31.240.1:49712
-[2025-12-31 16:47:46] Client connected from 172.31.240.1:49713
-[2025-12-31 16:47:46] [list_tasks] Action: User: project_id=120 status=SUCCESS user_id=2 response=107
-[2025-12-31 16:47:46] Client connected from 172.31.240.1:49714
-[2025-12-31 16:47:46] [list_members] Action: User: status=SUCCESS user_id=2 response=269
+[2025-12-31 19:46:17] Server start on port 8080
+[2025-12-31 19:46:24] Server start on port 8080
+[2025-12-31 19:46:27] Client connected
+[2025-12-31 19:46:27] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:27] Client connected
+[2025-12-31 19:46:27] Client connected
+[2025-12-31 19:46:27] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:27] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=137 project_name=Thread_Project_0_7626ab78
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=138 project_name=Thread_Project_1_3d7090e7
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=139 project_name=Thread_Project_2_99bb034d
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=140 project_name=Thread_Project_3_7e78de1e
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=141 project_name=Thread_Project_4_baf70a00
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=142 project_name=Thread_Project_5_f45a6980
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=143 project_name=Thread_Project_6_96be2244
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=144 project_name=Thread_Project_7_97f76330
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=145 project_name=Thread_Project_8_b47d373a
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=146 project_name=Thread_Project_9_af85c997
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=147 project_name=Thread_Project_10_4c4ed7da
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=148 project_name=Thread_Project_11_3bd3d8c9
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=149 project_name=Thread_Project_12_c6d53a7e
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=150 project_name=Thread_Project_13_940f8f5e
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=151 project_name=Thread_Project_14_faf856e1
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=152 project_name=Thread_Project_15_6e74aa21
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=153 project_name=Thread_Project_16_abad6edd
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=154 project_name=Thread_Project_17_3f9ec582
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=155 project_name=Thread_Project_18_f8399fc2
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] Client connected
+[2025-12-31 19:46:28] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:28] [create_project] user_id=3 project_id=156 project_name=Thread_Project_19_1b2d97d3
+[2025-12-31 19:46:28] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=157 project_name=Thread_Project_20_d84f3ed7
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=158 project_name=Thread_Project_21_387c3b6c
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=159 project_name=Thread_Project_22_f3af9e73
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=160 project_name=Thread_Project_23_d6e0e4ca
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=161 project_name=Thread_Project_24_45d42c06
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=162 project_name=Thread_Project_25_57888ce4
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=163 project_name=Thread_Project_26_9f0a536a
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=164 project_name=Thread_Project_27_13786a1f
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=165 project_name=Thread_Project_28_7d34d51d
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=166 project_name=Thread_Project_29_c06f21ef
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=167 project_name=Thread_Project_30_b4b67857
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=168 project_name=Thread_Project_31_4ab53514
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=169 project_name=Thread_Project_32_1fd656e4
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=170 project_name=Thread_Project_33_288b4b42
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=171 project_name=Thread_Project_34_c7e8c27d
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=172 project_name=Thread_Project_35_4f9def90
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=173 project_name=Thread_Project_36_b71f1675
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=174 project_name=Thread_Project_37_2f37752d
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=175 project_name=Thread_Project_38_e733f73b
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:29] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:29] Client connected
+[2025-12-31 19:46:29] [create_project] user_id=3 project_id=176 project_name=Thread_Project_39_3fd95e63
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=177 project_name=Thread_Project_40_7a2a2979
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=178 project_name=Thread_Project_41_5b359dc4
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=179 project_name=Thread_Project_42_da3b6508
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=180 project_name=Thread_Project_43_f924f49c
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=181 project_name=Thread_Project_44_572a80db
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=182 project_name=Thread_Project_45_ea4c83da
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=183 project_name=Thread_Project_46_45c65bcc
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=184 project_name=Thread_Project_47_e77cc100
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=185 project_name=Thread_Project_48_485e2c70
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=186 project_name=Thread_Project_49_3faf86f4
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=187 project_name=Thread_Project_50_e0019360
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=188 project_name=Thread_Project_51_e6a7b58c
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=189 project_name=Thread_Project_52_a9a4fe03
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=190 project_name=Thread_Project_53_806f143c
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=191 project_name=Thread_Project_54_8e27a0c5
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=192 project_name=Thread_Project_55_7ffd84ba
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=193 project_name=Thread_Project_56_efa83015
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=194 project_name=Thread_Project_57_006d13db
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=195 project_name=Thread_Project_58_6b1f7707
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:30] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] Client connected
+[2025-12-31 19:46:30] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:30] [create_project] user_id=3 project_id=196 project_name=Thread_Project_59_c44cb39f
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=197 project_name=Thread_Project_60_cffec621
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=198 project_name=Thread_Project_61_b581a6b5
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=199 project_name=Thread_Project_62_7b450137
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=200 project_name=Thread_Project_63_aa41bedd
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=201 project_name=Thread_Project_64_bfd1b469
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=202 project_name=Thread_Project_65_4ec0c2a3
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=203 project_name=Thread_Project_66_201ef5f1
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=204 project_name=Thread_Project_67_1b140bb5
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=205 project_name=Thread_Project_68_e56b0b55
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=206 project_name=Thread_Project_69_97297c12
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=207 project_name=Thread_Project_70_f57f060c
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=208 project_name=Thread_Project_71_10eef830
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=209 project_name=Thread_Project_72_488d8ca0
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=210 project_name=Thread_Project_73_2bc655f1
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=211 project_name=Thread_Project_74_3c76e9c5
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=212 project_name=Thread_Project_75_f0e58d47
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=213 project_name=Thread_Project_76_ccc1741d
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=214 project_name=Thread_Project_77_41d5d47e
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=215 project_name=Thread_Project_78_6b0863ae
+[2025-12-31 19:46:31] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:31] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] Client connected
+[2025-12-31 19:46:31] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:31] [create_project] user_id=3 project_id=216 project_name=Thread_Project_79_bbbac52b
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=217 project_name=Thread_Project_80_a4fd598f
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=218 project_name=Thread_Project_81_374f9183
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=219 project_name=Thread_Project_82_99853b54
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=220 project_name=Thread_Project_83_4d421a8d
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=221 project_name=Thread_Project_84_b6c45a42
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=222 project_name=Thread_Project_85_c0a6ac09
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=223 project_name=Thread_Project_86_f5b9ce9b
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=224 project_name=Thread_Project_87_b58b2df4
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=225 project_name=Thread_Project_88_a9ed8db1
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=226 project_name=Thread_Project_89_9acffcf3
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=227 project_name=Thread_Project_90_cef057a6
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=228 project_name=Thread_Project_91_49edb136
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=229 project_name=Thread_Project_92_c333bbc3
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=230 project_name=Thread_Project_93_5b49890d
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=231 project_name=Thread_Project_94_255d9811
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=232 project_name=Thread_Project_95_2f61df9f
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=233 project_name=Thread_Project_96_1e078c7c
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=234 project_name=Thread_Project_97_74876f69
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:46:32] Client connected
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=235 project_name=Thread_Project_98_4675024f
+[2025-12-31 19:46:32] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:46:32] [DISPATCH] action=create_project user_id=3 project_name=unknown
+[2025-12-31 19:46:32] [create_project] user_id=3 project_id=236 project_name=Thread_Project_99_b94c0f70
+[2025-12-31 19:49:41] Client connected
+[2025-12-31 19:49:41] [DISPATCH] action=register username=hoductu
+[2025-12-31 19:49:41] [register] Action: User: hoductu status=SUCCESS response=102
+[2025-12-31 19:49:43] Client connected
+[2025-12-31 19:49:43] [DISPATCH] action=login username=hoductu
+[2025-12-31 19:49:43] [login] Action: User: hoductu status=SUCCESS user_id=5 response=101
+[2025-12-31 19:49:46] Client connected
+[2025-12-31 19:49:46] [DISPATCH] action=list_projects user_id=5 username=hoductu
+[2025-12-31 19:49:57] Client connected
+[2025-12-31 19:49:57] [DISPATCH] action=login username=teonhe2
+[2025-12-31 19:49:57] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 19:49:59] Client connected
+[2025-12-31 19:49:59] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2025-12-31 19:50:27] Client connected
+[2025-12-31 19:50:27] [DISPATCH] action=create_project user_id=5 project_name=Minh Duc so pro1
+[2025-12-31 19:52:24] Client connected
+[2025-12-31 19:52:24] [DISPATCH] action=create_project user_id=5 project_name=Minh Duc so pro1
+[2025-12-31 19:52:24] Client connected
+[2025-12-31 19:52:24] [DISPATCH] action=create_project user_id=5 project_name=Minh Duc so pro1
+[2025-12-31 19:52:25] Client connected
+[2025-12-31 19:52:25] [DISPATCH] action=create_project user_id=5 project_name=Minh Duc so pro1
+[2025-12-31 19:52:41] Client connected
+[2025-12-31 19:52:41] [DISPATCH] action=create_project user_id=5 project_name=unknown
+[2025-12-31 19:52:41] [create_project] user_id=5 project_id=237 project_name=Minh Duc so pro1
+[2025-12-31 19:52:41] Client connected
+[2025-12-31 19:52:41] [DISPATCH] action=list_projects user_id=5 username=hoductu
+[2025-12-31 19:52:44] Client connected
+[2025-12-31 19:52:44] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 19:52:59] Client connected
+[2025-12-31 19:52:59] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:03:54] Client connected
+[2025-12-31 20:03:54] [DISPATCH] action=login username=hoductu
+[2025-12-31 20:03:54] [login] Action: User: hoductu status=SUCCESS user_id=5 response=101
+[2025-12-31 20:03:58] Client connected
+[2025-12-31 20:03:58] [DISPATCH] action=list_projects user_id=5 username=hoductu
+[2025-12-31 20:03:59] Client connected
+[2025-12-31 20:03:59] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:03:59] Client connected
+[2025-12-31 20:03:59] [DISPATCH] action=list_members user_id=5 project_id=237
+[2025-12-31 20:06:30] Client connected
+[2025-12-31 20:06:30] [DISPATCH] action=login username=hoductu
+[2025-12-31 20:06:30] [login] Action: User: hoductu status=SUCCESS user_id=5 response=101
+[2025-12-31 20:06:32] Client connected
+[2025-12-31 20:06:32] [DISPATCH] action=list_projects user_id=5 username=hoductu
+[2025-12-31 20:06:32] Client connected
+[2025-12-31 20:06:32] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:06:32] Client connected
+[2025-12-31 20:06:32] [DISPATCH] action=list_members user_id=5 project_id=237
+[2025-12-31 20:06:41] Client connected
+[2025-12-31 20:06:41] [DISPATCH] action=create_task user_id=5 project_id=237 task_name=test
+[2025-12-31 20:06:41] [create_task] user_id=5 project_id=237 task_id=1 task_name=test
+[2025-12-31 20:06:42] Client connected
+[2025-12-31 20:06:42] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:10:33] Client connected
+[2025-12-31 20:10:33] [DISPATCH] action=login username=hoductu
+[2025-12-31 20:10:33] [login] Action: User: hoductu status=SUCCESS user_id=5 response=101
+[2025-12-31 20:10:34] Client connected
+[2025-12-31 20:10:35] [DISPATCH] action=list_projects user_id=5 username=hoductu
+[2025-12-31 20:10:35] Client connected
+[2025-12-31 20:10:35] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:10:45] Client connected
+[2025-12-31 20:10:45] [DISPATCH] action=create_task user_id=5 project_id=237 task_name=tester2
+[2025-12-31 20:10:45] [create_task] user_id=5 project_id=237 task_id=2 task_name=tester2
+[2025-12-31 20:10:45] Client connected
+[2025-12-31 20:10:46] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:10:48] Client connected
+[2025-12-31 20:10:48] [DISPATCH] action=get_task_detail user_id=5 task_id=1
+[2025-12-31 20:10:48] [get_task_detail] user_id=5 task_id=1 comments_count=0
+[2025-12-31 20:10:56] Client connected
+[2025-12-31 20:10:56] [DISPATCH] action=assign_task user_id=5 task_id=1 assigned_to_user=-1
+[2025-12-31 20:10:56] Client connected
+[2025-12-31 20:10:56] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:11:15] Client connected
+[2025-12-31 20:11:15] [DISPATCH] action=assign_task user_id=5 task_id=1 assigned_to_user=-1
+[2025-12-31 20:11:34] Client connected
+[2025-12-31 20:11:34] [DISPATCH] action=add_member user_id=5 new_member=teonhe2 role=MEMBER
+[2025-12-31 20:11:34] [add_member] user_id=5 project_id=237 new_member=teonhe2 role=MEMBER
+[2025-12-31 20:11:34] Client connected
+[2025-12-31 20:11:34] [DISPATCH] action=list_members user_id=5 project_id=237
+[2025-12-31 20:11:41] Client connected
+[2025-12-31 20:11:41] [DISPATCH] action=assign_task user_id=5 task_id=1 assigned_to_user=-1
+[2025-12-31 20:11:56] Client connected
+[2025-12-31 20:11:56] [DISPATCH] action=assign_task user_id=5 task_id=1 assigned_to_user=-1
+[2025-12-31 20:12:02] Client connected
+[2025-12-31 20:12:02] [DISPATCH] action=assign_task user_id=5 task_id=1 assigned_to_user=-1
+[2025-12-31 20:12:05] Client connected
+[2025-12-31 20:12:05] [DISPATCH] action=get_task_detail user_id=5 task_id=1
+[2025-12-31 20:12:05] [get_task_detail] user_id=5 task_id=1 comments_count=0
+[2025-12-31 20:12:07] Client connected
+[2025-12-31 20:12:07] [DISPATCH] action=get_task_detail user_id=5 task_id=2
+[2025-12-31 20:12:08] [get_task_detail] user_id=5 task_id=2 comments_count=0
+[2025-12-31 20:12:14] Client connected
+[2025-12-31 20:12:14] [DISPATCH] action=assign_task user_id=5 task_id=2 assigned_to_user=-1
+[2025-12-31 20:12:14] Client connected
+[2025-12-31 20:12:14] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:13:22] Client connected
+[2025-12-31 20:13:22] [DISPATCH] action=create_task user_id=5 project_id=237 task_name=test3
+[2025-12-31 20:13:22] [create_task] user_id=5 project_id=237 task_id=3 task_name=test3
+[2025-12-31 20:13:22] Client connected
+[2025-12-31 20:13:22] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:13:28] Client connected
+[2025-12-31 20:13:28] [DISPATCH] action=get_task_detail user_id=5 task_id=3
+[2025-12-31 20:13:28] [get_task_detail] user_id=5 task_id=3 comments_count=0
+[2025-12-31 20:13:45] Client connected
+[2025-12-31 20:13:45] [DISPATCH] action=add_member user_id=5 new_member=teonhe role=MEMBER
+[2025-12-31 20:13:45] [add_member] user_id=5 project_id=237 new_member=teonhe role=MEMBER
+[2025-12-31 20:13:45] Client connected
+[2025-12-31 20:13:45] [DISPATCH] action=list_members user_id=5 project_id=237
+[2025-12-31 20:14:02] Client connected
+[2025-12-31 20:14:02] [DISPATCH] action=assign_task user_id=5 task_id=3 assigned_to_user=-1
+[2025-12-31 20:14:02] Client connected
+[2025-12-31 20:14:03] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:14:33] Client connected
+[2025-12-31 20:14:33] [DISPATCH] action=login username=teonhe2
+[2025-12-31 20:14:33] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 20:14:35] Client connected
+[2025-12-31 20:14:35] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2025-12-31 20:14:38] Client connected
+[2025-12-31 20:14:38] [DISPATCH] action=search_project user_id=3 search_term=
+[2025-12-31 20:14:39] Client connected
+[2025-12-31 20:14:39] [DISPATCH] action=list_tasks user_id=3 project_id=237
+[2025-12-31 20:14:53] Client connected
+[2025-12-31 20:14:53] [DISPATCH] action=create_task user_id=3 project_id=237 task_name=tao task moi
+[2025-12-31 20:14:53] [create_task] user_id=3 project_id=237 task_id=4 task_name=tao task moi
+[2025-12-31 20:14:53] Client connected
+[2025-12-31 20:14:53] [DISPATCH] action=list_tasks user_id=3 project_id=237
+[2025-12-31 20:15:35] Client connected
+[2025-12-31 20:15:35] [DISPATCH] action=get_task_detail user_id=3 task_id=4
+[2025-12-31 20:15:35] [get_task_detail] user_id=3 task_id=4 comments_count=0
+[2025-12-31 20:15:40] Client connected
+[2025-12-31 20:15:40] [DISPATCH] action=assign_task user_id=3 task_id=4 assigned_to_user=-1
+[2025-12-31 20:16:06] Client connected
+[2025-12-31 20:16:06] [DISPATCH] action=list_members user_id=3 project_id=237
+[2025-12-31 20:16:20] Client connected
+[2025-12-31 20:16:20] [DISPATCH] action=get_task_detail user_id=3 task_id=2
+[2025-12-31 20:16:20] [get_task_detail] user_id=3 task_id=2 comments_count=0
+[2025-12-31 20:16:28] Client connected
+[2025-12-31 20:16:28] [DISPATCH] action=comment_task user_id=3 task_id=2
+[2025-12-31 20:16:43] Client connected
+[2025-12-31 20:16:43] [DISPATCH] action=login username=teonhe2
+[2025-12-31 20:16:43] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2025-12-31 20:16:46] Client connected
+[2025-12-31 20:16:46] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2025-12-31 20:16:52] Client connected
+[2025-12-31 20:16:52] [DISPATCH] action=search_project user_id=3 search_term=
+[2025-12-31 20:16:53] Client connected
+[2025-12-31 20:16:53] [DISPATCH] action=list_tasks user_id=3 project_id=237
+[2025-12-31 20:16:59] Client connected
+[2025-12-31 20:16:59] [DISPATCH] action=get_task_detail user_id=3 task_id=2
+[2025-12-31 20:16:59] [get_task_detail] user_id=3 task_id=2 comments_count=1
+[2025-12-31 20:17:13] Client connected
+[2025-12-31 20:17:13] [DISPATCH] action=get_task_detail user_id=5 task_id=2
+[2025-12-31 20:17:13] [get_task_detail] user_id=5 task_id=2 comments_count=1
+[2025-12-31 20:17:19] Client connected
+[2025-12-31 20:17:19] [DISPATCH] action=comment_task user_id=5 task_id=2
+[2025-12-31 20:17:22] Client connected
+[2025-12-31 20:17:22] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2025-12-31 20:17:32] Client connected
+[2025-12-31 20:17:32] [DISPATCH] action=get_task_detail user_id=5 task_id=2
+[2025-12-31 20:17:32] [get_task_detail] user_id=5 task_id=2 comments_count=2
+[2025-12-31 20:18:20] Client connected
+[2025-12-31 20:18:20] [DISPATCH] action=get_task_detail user_id=5 task_id=4
+[2025-12-31 20:18:20] [get_task_detail] user_id=5 task_id=4 comments_count=0
+[2025-12-31 20:18:26] Client connected
+[2025-12-31 20:18:26] [DISPATCH] action=assign_task user_id=5 task_id=4 assigned_to_user=-1
+[2025-12-31 20:18:26] Client connected
+[2025-12-31 20:18:26] [DISPATCH] action=list_tasks user_id=5 project_id=237
+[2026-01-11 19:46:09] Server start on port 8080
+[2026-01-11 19:46:42] Client connected
+[2026-01-11 19:46:42] [DISPATCH] action=login username=teonhe2
+[2026-01-11 19:46:42] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2026-01-11 19:50:28] Client connected
+[2026-01-11 19:50:28] [DISPATCH] action=register username=minhduc1
+[2026-01-11 19:50:28] [register] Action: User: minhduc1 status=SUCCESS response=102
+[2026-01-11 19:53:41] Client connected
+[2026-01-11 19:53:41] [DISPATCH] action=login username=unknown
+[2026-01-11 19:53:41] [login] Action: User: null status=FAILED response=131
+[2026-01-11 19:54:22] Client connected
+[2026-01-11 19:54:22] [DISPATCH] action=login username=unknown
+[2026-01-11 19:54:22] [login] Action: User: null status=FAILED response=131
+[2026-01-11 19:55:28] Client connected
+[2026-01-11 20:02:22] Server start on port 8080
+[2026-01-11 20:02:34] Client connected
+[2026-01-11 20:02:34] [DISPATCH] action=register username=minhduc1
+[2026-01-11 20:02:34] [register] Action: User: minhduc1 status=FAILED response=162
+[2026-01-11 20:02:56] Client connected
+[2026-01-11 20:02:56] [DISPATCH] action=login username=minhduc1
+[2026-01-11 20:02:56] [login] Action: User: minhduc1 status=SUCCESS user_id=6 response=101
+[2026-01-11 20:06:06] Client connected
+[2026-01-11 20:06:06] [DISPATCH] action=login username=minhduc1
+[2026-01-11 20:06:06] [login] Action: User: minhduc1 status=SUCCESS user_id=6 response=101
+[2026-01-11 20:06:46] Client connected
+[2026-01-11 20:06:46] [DISPATCH] action=register username=minhduc1
+[2026-01-11 20:06:46] [register] Action: User: minhduc1 status=FAILED response=162
+[2026-01-11 20:08:09] Client connected
+[2026-01-11 20:08:09] [DISPATCH] action=register username=minhduc2
+[2026-01-11 20:08:09] [register] Action: User: minhduc2 status=SUCCESS response=102
+[2026-01-11 20:08:10] Client connected
+[2026-01-11 20:08:10] [DISPATCH] action=login username=minhduc2
+[2026-01-11 20:08:10] [login] Action: User: minhduc2 status=SUCCESS user_id=7 response=101
+[2026-01-11 20:08:15] Client connected
+[2026-01-11 20:08:15] [DISPATCH] action=login username=teonhe2
+[2026-01-11 20:08:16] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2026-01-11 20:08:56] Client connected
+[2026-01-11 20:08:56] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2026-01-11 20:09:00] Client connected
+[2026-01-11 20:09:00] [DISPATCH] action=list_projects user_id=7 username=minhduc2
+[2026-01-11 20:09:01] Client connected
+[2026-01-11 20:09:12] Client connected
+[2026-01-11 20:12:05] Client connected
+[2026-01-11 20:12:05] [DISPATCH] action=create_project user_id=7 project_name=Test
+[2026-01-11 20:12:51] Client connected
+[2026-01-11 20:12:51] [DISPATCH] action=create_project user_id=7 project_name=Test1
+[2026-01-11 20:15:13] Client connected
+[2026-01-11 20:15:13] [DISPATCH] action=create_project user_id=7 project_name=deploy
+[2026-01-11 20:17:01] Client connected
+[2026-01-11 20:17:01] [DISPATCH] action=login username=minhduc2
+[2026-01-11 20:17:01] [login] Action: User: minhduc2 status=SUCCESS user_id=7 response=101
+[2026-01-11 20:17:05] Client connected
+[2026-01-11 20:17:05] [DISPATCH] action=list_projects user_id=7 username=minhduc2
+[2026-01-11 20:17:14] Client connected
+[2026-01-11 20:17:14] [DISPATCH] action=create_project user_id=7 project_name=unknown
+[2026-01-11 20:17:14] [create_project] user_id=7 project_id=238 project_name=Test
+[2026-01-11 20:17:14] Client connected
+[2026-01-11 20:17:14] [DISPATCH] action=list_projects user_id=7 username=minhduc2
+[2026-01-11 20:17:43] Client connected
+[2026-01-11 20:17:43] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-11 20:18:06] Client connected
+[2026-01-11 20:18:06] [DISPATCH] action=list_members user_id=7 project_id=238
+[2026-01-11 20:18:41] Client connected
+[2026-01-11 20:18:41] [DISPATCH] action=add_member user_id=7 new_member=md role=MEMBER
+[2026-01-11 20:19:25] Client connected
+[2026-01-11 20:19:25] [DISPATCH] action=add_member user_id=7 new_member=teonhe2 role=MEMBER
+[2026-01-11 20:19:25] [add_member] user_id=7 project_id=238 new_member=teonhe2 role=MEMBER
+[2026-01-11 20:19:25] Client connected
+[2026-01-11 20:19:25] [DISPATCH] action=list_members user_id=7 project_id=238   
+[2026-01-11 20:20:59] Client connected
+[2026-01-11 20:20:59] [DISPATCH] action=login username=teonhe2
+[2026-01-11 20:20:59] [login] Action: User: teonhe2 status=SUCCESS user_id=3 response=101
+[2026-01-11 20:21:03] Client connected
+[2026-01-11 20:21:03] [DISPATCH] action=list_projects user_id=3 username=teonhe2
+[2026-01-11 20:21:11] Client connected
+[2026-01-11 20:21:11] [DISPATCH] action=search_project user_id=3 search_term=
+[2026-01-11 20:21:49] Client connected
+[2026-01-11 20:21:49] [DISPATCH] action=list_tasks user_id=3 project_id=238
+[2026-01-11 20:21:51] Client connected
+[2026-01-11 20:21:51] [DISPATCH] action=list_tasks user_id=3 project_id=238
+[2026-01-11 20:21:58] Client connected
+[2026-01-11 20:21:58] [DISPATCH] action=list_members user_id=3 project_id=238
+[2026-01-11 20:47:34] Client connected
+[2026-01-11 20:47:34] [DISPATCH] action=register username=cdjthe
+[2026-01-11 20:47:34] [register] Action: User: cdjthe status=SUCCESS response=102
+[2026-01-11 20:47:46] Client connected
+[2026-01-11 20:47:46] [DISPATCH] action=login username=minhduc2
+[2026-01-11 20:47:46] [login] Action: User: minhduc2 status=SUCCESS user_id=7 response=101
+[2026-01-11 20:48:00] Client connected
+[2026-01-11 20:48:00] [DISPATCH] action=list_projects user_id=6 username=minhduc1
+[2026-01-11 20:48:06] Client connected
+[2026-01-11 20:48:06] [DISPATCH] action=list_tasks user_id=6 project_id=238
+[2026-01-11 20:48:12] Client connected
+[2026-01-11 20:48:12] [DISPATCH] action=list_members user_id=6 project_id=238
+[2026-01-11 20:48:17] Client connected
+[2026-01-11 20:48:17] [DISPATCH] action=update_member user_id=6 project_id=238 member= new_role=PM
+[2026-01-11 20:48:29] Client connected
+[2026-01-11 20:48:29] [DISPATCH] action=add_member user_id=6 new_member=cdjthe role=MEMBER
+[2026-01-11 20:48:29] [add_member] status=152 message=Permission denied user_id=6 project_id=238
+[2026-01-11 20:48:57] Client connected
+[2026-01-11 20:48:57] [DISPATCH] action=create_project user_id=6 project_name=unknown
+[2026-01-11 20:48:57] [create_project] status=105 message=Project created successfully user_id=6 project_id=239 project_name=www
+[2026-01-11 20:48:57] Client connected
+[2026-01-11 20:48:57] [DISPATCH] action=list_projects user_id=6 username=minhduc1
+[2026-01-11 20:49:28] Client connected
+[2026-01-11 20:49:28] [DISPATCH] action=list_projects user_id=6 username=minhduc1
+[2026-01-11 20:49:32] Client connected
+[2026-01-11 20:49:32] [DISPATCH] action=search_project user_id=6 search_term=
+[2026-01-11 20:49:37] Client connected
+[2026-01-11 20:49:37] [DISPATCH] action=list_tasks user_id=6 project_id=239
+[2026-01-11 20:49:44] Client connected
+[2026-01-11 20:49:44] [DISPATCH] action=list_tasks user_id=6 project_id=239
+[2026-01-11 20:49:50] Client connected
+[2026-01-11 20:49:50] [DISPATCH] action=create_task user_id=6 project_id=239 task_name=dd
+[2026-01-11 20:49:50] [create_task] status=108 message=Task created user_id=6 project_id=239 task_id=6 task_name=dd
+[2026-01-11 20:49:50] Client connected
+[2026-01-11 20:49:50] [DISPATCH] action=list_tasks user_id=6 project_id=239
+[2026-01-11 20:50:36] Client connected
+[2026-01-11 20:50:36] [DISPATCH] action=create_task user_id=6 project_id=239 task_name=dd
+[2026-01-11 20:50:36] [create_task] status=108 message=Task created user_id=6 project_id=239 task_id=7 task_name=dd
+[2026-01-11 20:50:36] Client connected
+[2026-01-11 20:50:36] [DISPATCH] action=list_tasks user_id=6 project_id=239
+[2026-01-11 20:50:39] Client connected
+[2026-01-11 20:50:39] [DISPATCH] action=get_task_detail user_id=6 task_id=6
+[2026-01-11 20:50:39] [get_task_detail] user_id=6 task_id=6 comments_count=0
+[2026-01-11 20:51:01] Client connected
+[2026-01-11 20:51:01] [DISPATCH] action=login username=cdjthe
+[2026-01-11 20:51:01] [login] Action: User: cdjthe status=SUCCESS user_id=8 response=101
+[2026-01-12 03:53:00] Server start on port 8080
+[2026-01-12 03:53:13] Client connected
+[2026-01-12 03:53:13] [DISPATCH] action=login username=teonhe
+[2026-01-12 03:53:13] [login] Action: User: teonhe status=SUCCESS user_id=1 response=101
+[2026-01-12 03:56:05] Server start on port 8080
+[2026-01-12 03:56:15] Client connected
+[2026-01-12 03:56:15] [DISPATCH] action=login username=teonhe1
+[2026-01-12 03:56:15] [RESPONSE] status=101 message=Login successful
+[2026-01-12 03:56:15] [login] Action: User: teonhe1 status=SUCCESS user_id=2 response=101
+[2026-01-12 03:56:17] Client connected
+[2026-01-12 03:56:17] [DISPATCH] action=list_projects user_id=2 username=teonhe1
+[2026-01-12 03:56:17] [project/list_projects] status=153 message=No projects found user_id=2
+[2026-01-12 03:56:17] [RESPONSE] status=153 message=No projects found
+[2026-01-12 03:56:17] Client connected
+[2026-01-12 03:56:17] [DISPATCH] action=list_projects user_id=2 username=teonhe1
+[2026-01-12 03:56:17] [project/list_projects] status=153 message=No projects found user_id=2
+[2026-01-12 03:56:17] [RESPONSE] status=153 message=No projects found
+[2026-01-12 03:56:43] Client connected
+[2026-01-12 03:56:43] [DISPATCH] action=login username=minhduc2
+[2026-01-12 03:56:43] [RESPONSE] status=101 message=Login successful
+[2026-01-12 03:56:43] [login] Action: User: minhduc2 status=SUCCESS user_id=7 response=101
+[2026-01-12 03:56:45] Client connected
+[2026-01-12 03:56:45] [DISPATCH] action=list_projects user_id=7 username=minhduc2
+[2026-01-12 03:56:45] [RESPONSE] status=103 message=Projects retrieved
+[2026-01-12 03:57:28] Client connected
+[2026-01-12 03:57:28] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-12 03:57:28] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 03:57:38] Client connected
+[2026-01-12 03:57:38] [DISPATCH] action=create_task user_id=7 project_id=238 task_name=woww
+[2026-01-12 03:57:38] [create_task] status=108 message=Task created user_id=7 project_id=238 task_id=8 task_name=woww
+[2026-01-12 03:57:38] [RESPONSE] status=108 message=Task created
+[2026-01-12 03:57:38] Client connected
+[2026-01-12 03:57:38] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-12 03:57:38] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 03:58:17] Client connected
+[2026-01-12 03:58:17] [DISPATCH] action=create_task user_id=7 project_id=238 task_name=uow
+[2026-01-12 03:58:17] [create_task] status=108 message=Task created user_id=7 project_id=238 task_id=9 task_name=uow
+[2026-01-12 03:58:17] [RESPONSE] status=108 message=Task created
+[2026-01-12 03:58:17] Client connected
+[2026-01-12 03:58:17] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-12 03:58:17] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 03:58:27] Client connected
+[2026-01-12 03:58:28] [DISPATCH] action=get_task_detail user_id=7 task_id=5
+[2026-01-12 03:58:28] [RESPONSE] status=112 message=Task detail retrieved
+[2026-01-12 03:58:28] [get_task_detail] user_id=7 task_id=5 comments_count=3
+[2026-01-12 03:58:31] Client connected
+[2026-01-12 03:58:31] [DISPATCH] action=get_task_detail user_id=7 task_id=5
+[2026-01-12 03:58:31] [RESPONSE] status=112 message=Task detail retrieved
+[2026-01-12 03:58:31] [get_task_detail] user_id=7 task_id=5 comments_count=3
+[2026-01-12 03:58:35] Client connected
+[2026-01-12 03:58:35] [DISPATCH] action=update_task user_id=7 task_id=5 new_status=in_progress
+[2026-01-12 03:58:35] [RESPONSE] status=110 message=Task updated
+[2026-01-12 03:58:35] Client connected
+[2026-01-12 03:58:35] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-12 03:58:35] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 03:58:43] Client connected
+[2026-01-12 03:58:43] [DISPATCH] action=get_task_detail user_id=7 task_id=8
+[2026-01-12 03:58:43] [RESPONSE] status=112 message=Task detail retrieved
+[2026-01-12 03:58:43] [get_task_detail] user_id=7 task_id=8 comments_count=0
+[2026-01-12 03:58:46] Client connected
+[2026-01-12 03:58:46] [DISPATCH] action=update_task user_id=7 task_id=8 new_status=blocked
+[2026-01-12 03:58:46] [RESPONSE] status=110 message=Task updated
+[2026-01-12 03:58:46] Client connected
+[2026-01-12 03:58:46] [DISPATCH] action=list_tasks user_id=7 project_id=238
+[2026-01-12 03:58:46] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 04:06:35] Client connected
+[2026-01-12 04:06:35] [DISPATCH] action=search_project user_id=7 search_term=
+[2026-01-12 04:06:35] [RESPONSE] status=104 message=Search results
+[2026-01-12 04:06:53] Client connected
+[2026-01-12 04:06:53] [DISPATCH] action=search_project user_id=7 search_term=
+[2026-01-12 04:06:53] [RESPONSE] status=104 message=Search results
+[2026-01-12 04:08:33] Server start on port 8080
+[2026-01-12 04:09:47] Client connected
+[2026-01-12 04:09:47] [DISPATCH] action=register username=minhduc1
+[2026-01-12 04:09:47] [RESPONSE] status=162 message=Username exists
+[2026-01-12 04:09:47] [register] Action: User: minhduc1 status=FAILED response=162
+[2026-01-12 04:10:21] Client connected
+[2026-01-12 04:10:21] [DISPATCH] action=login username=minhduc1
+[2026-01-12 04:10:21] [RESPONSE] status=101 message=Login successful
+[2026-01-12 04:10:21] [login] Action: User: minhduc1 status=SUCCESS user_id=6 response=101
+[2026-01-12 04:10:42] Client connected
+[2026-01-12 04:10:42] [DISPATCH] action=list_projects user_id=6 username=minhduc1
+[2026-01-12 04:10:42] [RESPONSE] status=103 message=Projects retrieved
+[2026-01-12 04:10:54] Client connected
+[2026-01-12 04:10:54] [DISPATCH] action=list_tasks user_id=6 project_id=238
+[2026-01-12 04:10:54] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 04:10:58] Client connected
+[2026-01-12 04:10:58] [DISPATCH] action=list_tasks user_id=6 project_id=238
+[2026-01-12 04:10:58] [RESPONSE] status=107 message=List tasks success
+[2026-01-12 04:11:02] Client connected
+[2026-01-12 04:11:02] [DISPATCH] action=get_task_detail user_id=6 task_id=5
+[2026-01-12 04:11:02] [RESPONSE] status=112 message=Task detail retrieved
+[2026-01-12 04:11:02] [get_task_detail] user_id=6 task_id=5 comments_count=3

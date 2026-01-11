@@ -8,7 +8,7 @@
 /* ===== LIST PROJECTS ===== */
 void handle_list_projects(int client, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
-        write_server_log("[list_projects] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_PROJECT_VALIDATE);
+        write_server_log("[project/list_projects] user_id=%d", ERR_PROJECT_VALIDATE, "Invalid session/token", user_id);
         send_json_response(client, ERR_PROJECT_VALIDATE, "Invalid session/token", NULL);
         return;
     }
@@ -18,7 +18,8 @@ void handle_list_projects(int client, int user_id, MYSQL *conn) {
                       "FROM projects p "
                       "JOIN project_members pm ON p.project_id = pm.project_id "
                       "WHERE pm.user_id=?";
-    if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {        write_server_log("[list_projects] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_PROJECT_SERVER);        send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
+    if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {
+        write_server_log("[project/list_projects] user_id=%d", ERR_PROJECT_SERVER, "Server error", user_id);
         if (stmt) mysql_stmt_close(stmt);
         return;
     }
@@ -30,8 +31,7 @@ void handle_list_projects(int client, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(stmt, bind);
 
     if (mysql_stmt_execute(stmt) != 0) {
-        write_server_log("[list_projects] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_PROJECT_SERVER);
-        send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
+        write_server_log("[project/list_projects] user_id=%d", ERR_PROJECT_SERVER, "Server error", user_id);
         mysql_stmt_close(stmt);
         return;
     }
@@ -39,7 +39,7 @@ void handle_list_projects(int client, int user_id, MYSQL *conn) {
     mysql_stmt_store_result(stmt);
     if (mysql_stmt_num_rows(stmt) == 0) {
         mysql_stmt_close(stmt);
-        write_server_log("[list_projects] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_PROJECT_NOT_FOUND);
+        write_server_log("[project/list_projects] user_id=%d", ERR_PROJECT_NOT_FOUND, "No projects found", user_id);
         send_json_response(client, ERR_PROJECT_NOT_FOUND, "No projects found", NULL);
         return;
     }
@@ -63,19 +63,20 @@ void handle_list_projects(int client, int user_id, MYSQL *conn) {
     }
     mysql_stmt_close(stmt);
 
-    write_server_log("[list_projects] Action: User: status=SUCCESS user_id=%d response=%s", user_id, RES_LIST_PROJECT_OK);
     send_json_response(client, RES_LIST_PROJECT_OK, "Projects retrieved", arr);
 }
 
 /* ===== SEARCH PROJECT ===== */
 void handle_search_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
+        write_server_log("[project/search_project] status=%s message=%s user_id=%d", ERR_SEARCH_PERMISSION, "Invalid session/token", user_id);
         send_json_response(client, ERR_SEARCH_PERMISSION, "Invalid session/token", NULL);
         return;
     }
 
     cJSON *kw = cJSON_GetObjectItem(data, "keyword");
     if (!kw || !cJSON_IsString(kw)) {
+        write_server_log("[project/search_project] status=%s message=%s user_id=%d", ERR_PROJECT_VALIDATE, "Missing keyword", user_id);
         send_json_response(client, ERR_PROJECT_VALIDATE, "Missing keyword", NULL);
         return;
     }
@@ -89,13 +90,13 @@ void handle_search_project(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     MYSQL_STMT *stmt = mysql_stmt_init(conn);
     if (!stmt || mysql_stmt_prepare(stmt, query, strlen(query)) != 0) {
-        send_json_response(client, ERR_SEARCH_PROJECT_SRV, "Server error", NULL);
+        write_server_log("[project/search_project] status=%s message=%s user_id=%d", ERR_SEARCH_PROJECT_SRV, "Server error", user_id);
         if (stmt) mysql_stmt_close(stmt);
         return;
     }
 
     if (mysql_stmt_execute(stmt) != 0) {
-        send_json_response(client, ERR_SEARCH_PROJECT_SRV, "Server error", NULL);
+        write_server_log("[project/search_project] status=%s message=%s user_id=%d", ERR_SEARCH_PROJECT_SRV, "Server error", user_id);
         mysql_stmt_close(stmt);
         return;
     }
@@ -103,6 +104,7 @@ void handle_search_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_store_result(stmt);
     if (mysql_stmt_num_rows(stmt) == 0) {
         mysql_stmt_close(stmt);
+        write_server_log("[project/search_project] status=%s message=%s user_id=%d keyword=%s", ERR_SEARCH_NOT_FOUND, "No projects found", user_id, kw->valuestring);
         send_json_response(client, ERR_SEARCH_NOT_FOUND, "No projects found", NULL);
         return;
     }
@@ -126,14 +128,13 @@ void handle_search_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     }
     mysql_stmt_close(stmt);
 
-    write_server_log("[search_project] Action: User: status=SUCCESS user_id=%d response=%s", user_id, RES_SEARCH_PROJECT_OK);
     send_json_response(client, RES_SEARCH_PROJECT_OK, "Search results", arr);
 }
 
 /* ===== CREATE PROJECT ===== */
 void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
-        write_server_log("[create_project] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_CREATE_PROJECT_VAL);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d", ERR_CREATE_PROJECT_VAL, "Invalid session/token", user_id);
         send_json_response(client, ERR_CREATE_PROJECT_VAL, "Invalid session/token", NULL);
         return;
     }
@@ -142,7 +143,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     cJSON *desc = cJSON_GetObjectItem(data,"description");
 
     if (!name || !cJSON_IsString(name) || strlen(name->valuestring)==0) {
-        write_server_log("[create_project] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_CREATE_PROJECT_VAL);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d", ERR_CREATE_PROJECT_VAL, "Missing project_name", user_id);
         send_json_response(client, ERR_CREATE_PROJECT_VAL, "Missing project_name", NULL);
         return;
     }
@@ -152,6 +153,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     const char *sql_chk = "SELECT project_id FROM projects WHERE project_name=?";
     if (!chk || mysql_stmt_prepare(chk,sql_chk,strlen(sql_chk))!=0){
         if (chk) mysql_stmt_close(chk);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_name=%s", ERR_CREATE_PROJECT_SRV, "Server error", user_id, name->valuestring);
         send_json_response(client, ERR_CREATE_PROJECT_SRV, "Server error", NULL);
         return;
     }
@@ -163,12 +165,14 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(chk,bind_chk);
     if (mysql_stmt_execute(chk)!=0){
         mysql_stmt_close(chk);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_name=%s", ERR_CREATE_PROJECT_SRV, "Server error", user_id, name->valuestring);
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
     mysql_stmt_store_result(chk);
     if(mysql_stmt_num_rows(chk)>0){
         mysql_stmt_close(chk);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_name=%s", ERR_PROJECT_CONFLICT, "Project name exists", user_id, name->valuestring);
         send_json_response(client, ERR_PROJECT_CONFLICT,"Project name exists",NULL);
         return;
     }
@@ -179,6 +183,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     const char *sql_ins="INSERT INTO projects(project_name,description) VALUES(?,?)";
     if (!ins || mysql_stmt_prepare(ins,sql_ins,strlen(sql_ins))!=0){
         if(ins) mysql_stmt_close(ins);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_name=%s", ERR_CREATE_PROJECT_SRV, "Server error", user_id, name->valuestring);
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
@@ -197,6 +202,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(ins,bind_ins);
     if(mysql_stmt_execute(ins)!=0){
         mysql_stmt_close(ins);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_name=%s", ERR_CREATE_PROJECT_SRV, "Server error", user_id, name->valuestring);
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
@@ -208,6 +214,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     const char *sql_pm="INSERT INTO project_members(project_id,user_id,role) VALUES(?,?,?)";
     if (!pm || mysql_stmt_prepare(pm,sql_pm,strlen(sql_pm))!=0){
         if(pm) mysql_stmt_close(pm);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_id=%d", ERR_CREATE_PROJECT_SRV, "Server error", user_id, proj_id);
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
@@ -220,12 +227,13 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(pm,bind_pm);
     if(mysql_stmt_execute(pm)!=0){
         mysql_stmt_close(pm);
+        write_server_log("[project/create_project] status=%s message=%s user_id=%d project_id=%d", ERR_CREATE_PROJECT_SRV, "Server error", user_id, proj_id);
         send_json_response(client, ERR_CREATE_PROJECT_SRV,"Server error",NULL);
         return;
     }
     mysql_stmt_close(pm);
     
-    write_server_log("[create_project] Action: User: status=SUCCESS user_id=%d project_id=%d response=%s", user_id, proj_id, RES_CREATE_PROJECT_OK);
+    write_server_log("[create_project] status=%s message=%s user_id=%d project_id=%d project_name=%s", RES_CREATE_PROJECT_OK, "Project created successfully", user_id, proj_id, name->valuestring);
 
     send_json_response(client, RES_CREATE_PROJECT_OK,"Project created successfully",NULL);
 }
@@ -233,6 +241,7 @@ void handle_create_project(int client, cJSON *data, int user_id, MYSQL *conn) {
 /* ===== ADD MEMBER ===== */
 void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
+        write_server_log("[add_member] status=%s message=%s user_id=%d", ERR_MEMBER_VALIDATE, "Invalid session/token", user_id);
         send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid session/token", NULL);
         return;
     }
@@ -244,6 +253,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (!pid || !cJSON_IsNumber(pid) ||
         !uname || !cJSON_IsString(uname) ||
         !role || !cJSON_IsString(role)) {
+        write_server_log("[add_member] status=%s message=%s user_id=%d", ERR_ADD_MEMBER_VAL, "Missing required fields", user_id);
         send_json_response(client, ERR_ADD_MEMBER_VAL, "Missing required fields", NULL);
         return;
     }
@@ -257,7 +267,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     } else if (strcmp(role->valuestring, "MEMBER") == 0) {
         role_val = ROLE_MEMBER;
     } else {
-        write_server_log("[add_member] Action: User: status=FAILED user_id=%d response=%s", user_id, ERR_MEMBER_VALIDATE);
+        write_server_log("[add_member] status=%s message=%s user_id=%d role=%s", ERR_MEMBER_VALIDATE, "Invalid role", user_id, role->valuestring);
         send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid role", NULL);
         return;
     }
@@ -265,6 +275,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     /* ===== CHECK PM PERMISSION ===== */
     int my_role = db_get_user_role(conn, user_id, project_id);
     if (my_role != ROLE_PM) {
+        write_server_log("[add_member] status=%s message=%s user_id=%d project_id=%d", ERR_MEMBER_PERMISSION, "Permission denied", user_id, project_id);
         send_json_response(client, ERR_MEMBER_PERMISSION, "Permission denied", NULL);
         return;
     }
@@ -294,6 +305,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     if (mysql_stmt_num_rows(chk) == 0) {
         mysql_stmt_close(chk);
+        write_server_log("[add_member] status=%s message=%s user_id=%d username=%s", ERR_USER_NOT_FOUND, "User not found", user_id, uname->valuestring);
         send_json_response(client, ERR_USER_NOT_FOUND, "User not found", NULL);
         return;
     }
@@ -320,6 +332,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     if (mysql_stmt_num_rows(conf) > 0) {
         mysql_stmt_close(conf);
+        write_server_log("[add_member] status=%s message=%s project_id=%d new_user_id=%d", ERR_ADD_MEMBER_CONFLICT, "User already member", project_id, new_user_id);
         send_json_response(client, ERR_ADD_MEMBER_CONFLICT,
                            "User already member", NULL);
         return;
@@ -344,6 +357,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_bind_param(ins, bind_ins);
 
     if (mysql_stmt_execute(ins) != 0) {
+        write_server_log("[add_member] status=%s message=%s project_id=%d new_user=%s", ERR_ADD_MEMBER_SERVER, mysql_error(conn), project_id, uname->valuestring);
         send_json_response(client, ERR_ADD_MEMBER_SERVER,
                            mysql_error(conn), NULL);
         mysql_stmt_close(ins);
@@ -351,7 +365,7 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
     }
     mysql_stmt_close(ins);
     
-    write_server_log("[add_member] Action: User: status=SUCCESS user_id=%d response=%s", user_id, RES_ADD_MEMBER_OK);
+    write_server_log("[add_member] status=%s message=%s user_id=%d project_id=%d new_member=%s role=%s", RES_ADD_MEMBER_OK, "Member added successfully", user_id, project_id, uname->valuestring, role->valuestring);
 
     send_json_response(client, RES_ADD_MEMBER_OK,
                        "Member added successfully", NULL);
@@ -360,12 +374,14 @@ void handle_add_member(int client, cJSON *data, int user_id, MYSQL *conn) {
 /* ===== LIST MEMBERS ===== */
 void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
     if (user_id <= 0) {
+        write_server_log("[list_members] status=%s message=%s user_id=%d", ERR_MEMBER_VALIDATE, "Invalid session/token", user_id);
         send_json_response(client, ERR_MEMBER_VALIDATE, "Invalid session/token", NULL);
         return;
     }
 
     cJSON *pid_json = cJSON_GetObjectItem(data, "project_id");
     if (!pid_json || !cJSON_IsNumber(pid_json)) {
+        write_server_log("[list_members] status=%s message=%s user_id=%d", ERR_MEMBER_VALIDATE, "Missing project_id", user_id);
         send_json_response(client, ERR_MEMBER_VALIDATE, "Missing project_id", NULL);
         return;
     }
@@ -375,6 +391,7 @@ void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
     // Kiểm tra quyền của user: chỉ PM hoặc MEMBER mới được xem
     int my_role = db_get_user_role(conn, user_id, project_id);
     if (my_role != ROLE_PM && my_role != ROLE_MEMBER) {
+        write_server_log("[list_members] status=%s message=%s user_id=%d project_id=%d", ERR_MEMBER_PERMISSION, "Permission denied", user_id, project_id);
         send_json_response(client, ERR_MEMBER_PERMISSION, "Permission denied", NULL);
         return;
     }
@@ -386,6 +403,7 @@ void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
                       "WHERE pm.project_id=?";
     if (!stmt || mysql_stmt_prepare(stmt, sql, strlen(sql)) != 0) {
         if (stmt) mysql_stmt_close(stmt);
+        write_server_log("[list_members] status=%s message=%s user_id=%d project_id=%d", ERR_PROJECT_SERVER, "Server error", user_id, project_id);
         send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
         return;
     }
@@ -398,6 +416,7 @@ void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
 
     if (mysql_stmt_execute(stmt) != 0) {
         mysql_stmt_close(stmt);
+        write_server_log("[list_members] status=%s message=%s user_id=%d project_id=%d", ERR_PROJECT_SERVER, "Server error", user_id, project_id);
         send_json_response(client, ERR_PROJECT_SERVER, "Server error", NULL);
         return;
     }
@@ -405,6 +424,7 @@ void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
     mysql_stmt_store_result(stmt);
     if (mysql_stmt_num_rows(stmt) == 0) {
         mysql_stmt_close(stmt);
+        write_server_log("[list_members] status=%s message=%s user_id=%d project_id=%d", ERR_MEMBER_NOT_FOUND, "No members found", user_id, project_id);
         send_json_response(client, ERR_MEMBER_NOT_FOUND, "No members found", NULL);
         return;
     }
@@ -429,7 +449,5 @@ void handle_list_members(int client, cJSON *data, int user_id, MYSQL *conn) {
     }
 
     mysql_stmt_close(stmt);
-    write_server_log("[list_members] Action: User: status=SUCCESS user_id=%d response=%s", user_id, RES_LIST_MEMBER_OK);
     send_json_response(client, RES_LIST_MEMBER_OK, "Members retrieved", arr);
 }
-
